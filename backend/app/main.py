@@ -42,3 +42,12 @@ app.include_router(neo.router)
 @app.get("/health")
 async def health_check():
     return {"status": "ok"}
+
+
+@app.get("/debug/config")
+async def debug_config():
+    return {
+        "nasa_api_key": settings.nasa_api_key,
+        "cache_ttl": settings.cache_ttl,
+        "env_file": str(settings.model_config.get("env_file", "not set")),
+    }
