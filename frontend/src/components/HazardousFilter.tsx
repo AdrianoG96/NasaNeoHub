@@ -18,7 +18,7 @@ const options: { value: HazardousFilterValue; label: string }[] = [
 export function HazardousFilter({ value, onChange, totalCount, filteredCount }: HazardousFilterProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-      <div className="flex rounded-lg border bg-muted p-0.5" role="tablist" aria-label="Filtro asteroidi pericolosi">
+      <div className="flex rounded-lg border border-white/10 bg-white/5 p-0.5" role="tablist" aria-label="Filtro asteroidi pericolosi">
         {options.map((option) => (
           <button
             key={option.value}
@@ -27,17 +27,18 @@ export function HazardousFilter({ value, onChange, totalCount, filteredCount }: 
             onClick={() => onChange(option.value)}
             className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
               value === option.value
-                ? "bg-background text-foreground shadow-xs"
-                : "text-muted-foreground hover:text-foreground"
+                ? "bg-white/10 text-white shadow-xs"
+                : "text-white/50 hover:text-white/80"
             }`}
           >
             {option.label}
           </button>
         ))}
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-sm text-white/50">
         Showing {filteredCount} of {totalCount} asteroids
       </p>
     </div>
   )
+
 }

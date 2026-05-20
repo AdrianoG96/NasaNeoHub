@@ -65,13 +65,13 @@ export function DateRangeSelector({ onSearch, isLoading }: DateRangeSelectorProp
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:gap-3">
       <div className="flex flex-col gap-1.5 sm:flex-1">
-        <label className="text-sm font-medium text-foreground">Start Date</label>
+        <label className="text-sm font-medium text-white/70">Start Date</label>
         <Popover open={startOpen} onOpenChange={setStartOpen}>
-          <PopoverTrigger render={<Button variant="outline" className={cn("w-full justify-start text-left font-normal sm:w-44", !startDate && "text-muted-foreground")} />}>
-            <CalendarIcon className="size-4 shrink-0" />
+          <PopoverTrigger render={<Button variant="outline" className={cn("w-full justify-start text-left font-normal border-white/10 bg-white/5 text-white sm:w-44", !startDate && "text-white/40")} />}>
+            <CalendarIcon className="size-4 shrink-0 text-white/50" />
             <span className="truncate">{startDate ? format(startDate, "PPP") : <span>Pick a date</span>}</span>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto border-white/10 bg-slate-800 p-0" align="start">
             <Calendar
               mode="single"
               selected={startDate}
@@ -83,13 +83,13 @@ export function DateRangeSelector({ onSearch, isLoading }: DateRangeSelectorProp
       </div>
 
       <div className="flex flex-col gap-1.5 sm:flex-1">
-        <label className="text-sm font-medium text-foreground">End Date</label>
+        <label className="text-sm font-medium text-white/70">End Date</label>
         <Popover open={endOpen} onOpenChange={setEndOpen}>
-          <PopoverTrigger render={<Button variant="outline" className={cn("w-full justify-start text-left font-normal sm:w-44", !endDate && "text-muted-foreground")} />}>
-            <CalendarIcon className="size-4 shrink-0" />
+          <PopoverTrigger render={<Button variant="outline" className={cn("w-full justify-start text-left font-normal border-white/10 bg-white/5 text-white sm:w-44", !endDate && "text-white/40")} />}>
+            <CalendarIcon className="size-4 shrink-0 text-white/50" />
             <span className="truncate">{endDate ? format(endDate, "PPP") : <span>Pick a date</span>}</span>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          <PopoverContent className="w-auto border-white/10 bg-slate-800 p-0" align="start">
             <Calendar
               mode="single"
               selected={endDate}
@@ -100,7 +100,7 @@ export function DateRangeSelector({ onSearch, isLoading }: DateRangeSelectorProp
         </Popover>
       </div>
 
-      <Button onClick={handleSearch} disabled={isSearchDisabled} className="w-full sm:w-auto">
+      <Button onClick={handleSearch} disabled={isSearchDisabled} className="w-full bg-blue-600 text-white hover:bg-blue-500 sm:w-auto">
         {isLoading ? (
           <>
             <Loader2 className="size-4 animate-spin" />
@@ -112,8 +112,9 @@ export function DateRangeSelector({ onSearch, isLoading }: DateRangeSelectorProp
       </Button>
 
       {error && (
-        <p className="w-full text-sm text-destructive">{error}</p>
+        <p className="w-full text-sm text-red-400">{error}</p>
       )}
     </div>
   )
+
 }

@@ -15,14 +15,15 @@ export function EmptyState({
   icon,
 }: EmptyStateProps) {
   return (
-    <Card>
+    <Card className="border-white/10 bg-white/5">
       <CardContent className="flex flex-col items-center gap-3 py-16">
-        {icon ?? <Telescope className="size-12 text-muted-foreground/40" />}
+        {icon ?? <Telescope className="size-12 text-white/20" />}
         <div className="space-y-1 text-center">
-          <p className="text-lg font-semibold text-foreground">{title}</p>
-          <p className="text-sm text-muted-foreground">{subtitle}</p>
+          <p className="text-lg font-semibold text-white">{title}</p>
+          <p className="text-sm text-white/50">{subtitle}</p>
         </div>
       </CardContent>
     </Card>
   )
+
 }

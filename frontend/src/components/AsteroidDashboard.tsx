@@ -3,21 +3,15 @@
 import { useState, useMemo, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { DateRangeSelector } from "@/components/DateRangeSelector"
-import { HazardousFilter } from "@/components/HazardousFilter"
-import { AsteroidTable } from "@/components/AsteroidTable"
-import { TableSkeleton } from "@/components/TableSkeleton"
 import { ErrorAlert } from "@/components/ErrorAlert"
 import { EmptyState } from "@/components/EmptyState"
-import { StatsCards } from "@/components/StatsCards"
-import { HazardAlert } from "@/components/HazardAlert"
-import { OrbitVisualization } from "@/components/OrbitVisualization"
-import { BarChart3, ScatterChartIcon, OrbitIcon, Download } from "lucide-react"
-import { fetchAsteroidFeed } from "@/lib/api"
-import { generateCsv } from "@/lib/csv"
-import { DistanceScatterChart } from "@/components/DistanceScatterChart"
-import { DiameterBarChart } from "@/components/DiameterBarChart"
+import { DashboardTabs } from "@/components/DashboardTabs"
+import { DiscoveryBadges, incrementSearchCount } from "@/components/DiscoveryBadges"
+import { AsteroidCompare } from "@/components/AsteroidCompare"
+import { GlossaryDialog } from "@/components/GlossaryDialog"
 import { AsteroidDetail } from "@/components/AsteroidDetail"
-import { Button } from "@/components/ui/button"
+import { fetchAsteroidFeed } from "@/lib/api"
+import { Search, BookOpen, ArrowLeftRight } from "lucide-react"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
 export function AsteroidDashboard() {
@@ -30,7 +24,6 @@ export function AsteroidDashboard() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
   const [selectedAsteroidId, setSelectedAsteroidId] = useState<string | null>(null)
   const [currentRange, setCurrentRange] = useState<{ start: string; end: string } | null>(null)
-  const [show3D, setShow3D] = useState(false)
 
   const filteredAsteroids = useMemo(() => {
     let result = [...asteroids]
@@ -63,12 +56,12 @@ export function AsteroidDashboard() {
     setAsteroids([])
     setTotal(0)
     setCurrentRange({ start: startDate, end: endDate })
-    setShow3D(false)
 
     try {
       const data = await fetchAsteroidFeed(startDate, endDate)
       setAsteroids(data.asteroids)
       setTotal(data.total)
+      incrementSearchCount()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Errore durante il caricamento dei dati")
     } finally {
@@ -91,154 +84,64 @@ export function AsteroidDashboard() {
     setSelectedAsteroidId(id)
   }, [])
 
-  const handleExportCsv = useCallback(() => {
-    if (currentRange && filteredAsteroids.length > 0) {
-      generateCsv(filteredAsteroids, currentRange.start, currentRange.end)
-    }
-  }, [filteredAsteroids, currentRange])
-
   return (
     <div className="flex flex-col gap-6">
-      <Card>
+      {/* Search Card */}
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Search Asteroids</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-white">
+            <Search className="size-5 text-blue-400" />
+            Search Asteroids
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <DateRangeSelector onSearch={handleSearch} isLoading={isLoading} />
         </CardContent>
       </Card>
 
+      {/* Top Bar: Badges + Actions */}
+      {asteroids.length > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <DiscoveryBadges asteroids={asteroids} />
+          <div className="flex items-center gap-2">
+            <AsteroidCompare asteroids={filteredAsteroids} />
+            <GlossaryDialog />
+          </div>
+        </div>
+      )}
+
       {error && (
         <ErrorAlert message={error} onDismiss={() => setError(null)} />
       )}
 
       {asteroids.length > 0 && (
-        <>
-          {/* Stats Cards */}
-          <StatsCards asteroids={asteroids} />
-
-          {/* Hazard Alert */}
-          <HazardAlert
-            hazardousCount={hazardousCount}
-            totalCount={total}
-            onSetFilter={setHazardousFilter}
-            onDismiss={() => {}}
-          />
-
-          {/* Distance Over Time Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <ScatterChartIcon className="size-5" />
-                Distance Over Time
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="flex h-64 items-center justify-center text-muted-foreground">Loading chart...</div>
-              ) : (
-                <DistanceScatterChart asteroids={filteredAsteroids} />
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Diameter Distribution Chart */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="size-5" />
-                Diameter Distribution
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="flex h-64 items-center justify-center text-muted-foreground">Loading chart...</div>
-              ) : (
-                <DiameterBarChart asteroids={filteredAsteroids} />
-              )}
-            </CardContent>
-          </Card>
-
-          {/* 3D Orbit Visualization */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <OrbitIcon className="size-5" />
-                3D Orbit Visualization
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {show3D ? (
-                <OrbitVisualization
-                  asteroids={filteredAsteroids}
-                  onAsteroidClick={handleAsteroidClick}
-                />
-              ) : (
-                <div className="flex flex-col items-center gap-3 py-8">
-                  <OrbitIcon className="size-12 text-muted-foreground/40" />
-                  <p className="text-sm text-muted-foreground">
-                    Explore asteroid orbits in 3D space
-                  </p>
-                  <Button variant="outline" onClick={() => setShow3D(true)}>
-                    Load 3D Visualization
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Asteroids Table */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Asteroids</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-4">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <HazardousFilter
-                  value={hazardousFilter}
-                  onChange={setHazardousFilter}
-                  totalCount={total}
-                  filteredCount={filteredAsteroids.length}
-                />
-                {filteredAsteroids.length > 0 && currentRange && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleExportCsv}
-                    className="flex items-center gap-2"
-                  >
-                    <Download className="size-4" />
-                    Export CSV
-                  </Button>
-                )}
-              </div>
-              {isLoading ? (
-                <TableSkeleton />
-              ) : (
-                <AsteroidTable
-                  asteroids={filteredAsteroids}
-                  sortField={sortField}
-                  sortDirection={sortDirection}
-                  onSort={handleSort}
-                  onAsteroidClick={handleAsteroidClick}
-                />
-              )}
-            </CardContent>
-          </Card>
-        </>
+        <DashboardTabs
+          asteroids={asteroids}
+          filteredAsteroids={filteredAsteroids}
+          total={total}
+          isLoading={isLoading}
+          hazardousCount={hazardousCount}
+          hazardousFilter={hazardousFilter}
+          sortField={sortField}
+          sortDirection={sortDirection}
+          currentRange={currentRange}
+          onSetHazardousFilter={setHazardousFilter}
+          onSort={handleSort}
+          onAsteroidClick={handleAsteroidClick}
+        />
       )}
 
       {!isLoading && asteroids.length === 0 && !error && (
         <EmptyState
-          title="Seleziona un intervallo di date"
-          subtitle="Scegli una data di inizio e fine, poi clicca Search per esplorare gli asteroidi vicini alla Terra."
+          title="Select a date range to begin"
+          subtitle="Choose a start and end date, then click Search to explore near-Earth asteroids."
         />
       )}
 
       {!isLoading && asteroids.length > 0 && filteredAsteroids.length === 0 && (
         <EmptyState
-          title="Nessun asteroide corrisponde al filtro"
-          subtitle="Prova a cambiare il filtro Hazardous per vedere più risultati."
+          title="No asteroids match the filter"
+          subtitle="Try changing the Hazardous filter to see more results."
         />
       )}
 
@@ -249,3 +152,5 @@ export function AsteroidDashboard() {
     </div>
   )
 }
+
+

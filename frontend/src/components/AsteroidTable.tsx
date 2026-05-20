@@ -34,15 +34,15 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-lg border border-white/10">
     <Table>
       <TableHeader>
-        <TableRow>
-          <TableHead className="w-48">Name</TableHead>
+        <TableRow className="border-white/5 hover:bg-transparent">
+          <TableHead className="w-48 text-white/60">Name</TableHead>
           {columns.map((col) => (
             <TableHead
               key={col.key}
-              className={col.sortable ? "cursor-pointer select-none" : ""}
+              className={`text-white/60 ${col.sortable ? "cursor-pointer select-none" : ""}`}
               onClick={() => col.sortable && handleSort(col.key)}
               tabIndex={col.sortable ? 0 : undefined}
               onKeyDown={col.sortable ? (e) => e.key === "Enter" && handleSort(col.key) : undefined}
@@ -54,35 +54,35 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
               )}
             </TableHead>
           ))}
-          <TableHead className="w-24">Hazardous</TableHead>
+          <TableHead className="w-24 text-white/60">Hazardous</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {asteroids.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
-              Nessun asteroide trovato
+            <TableCell colSpan={6} className="py-8 text-center text-white/40">
+              No asteroids found
             </TableCell>
           </TableRow>
         ) : (
           asteroids.map((asteroid) => (
             <TableRow
               key={asteroid.id}
-              className="cursor-pointer"
+              className="cursor-pointer border-white/5 transition-colors hover:bg-white/5"
               onClick={() => onAsteroidClick(asteroid.id)}
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && onAsteroidClick(asteroid.id)}
               aria-label={`Dettagli per ${asteroid.name}`}
             >
-              <TableCell className="font-medium">{asteroid.name}</TableCell>
-              <TableCell>{formatDistance(asteroid.miss_distance_km)}</TableCell>
-              <TableCell>{formatDiameter(asteroid.estimated_diameter_min_km, asteroid.estimated_diameter_max_km)}</TableCell>
-              <TableCell>{formatVelocity(asteroid.relative_velocity_kph)}</TableCell>
+              <TableCell className="font-medium text-white">{asteroid.name}</TableCell>
+              <TableCell className="text-white/70">{formatDistance(asteroid.miss_distance_km)}</TableCell>
+              <TableCell className="text-white/70">{formatDiameter(asteroid.estimated_diameter_min_km, asteroid.estimated_diameter_max_km)}</TableCell>
+              <TableCell className="text-white/70">{formatVelocity(asteroid.relative_velocity_kph)}</TableCell>
               <TableCell>
                 {asteroid.is_potentially_hazardous_asteroid ? (
-                  <Badge variant="destructive">Yes</Badge>
+                  <Badge variant="destructive" className="animate-pulse">Yes</Badge>
                 ) : (
-                  <Badge variant="outline" className="border-green-500 text-green-600 dark:text-green-400">No</Badge>
+                  <Badge variant="outline" className="border-green-500/50 text-green-400">No</Badge>
                 )}
               </TableCell>
             </TableRow>
@@ -92,4 +92,5 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
     </Table>
     </div>
   )
+
 }

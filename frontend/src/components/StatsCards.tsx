@@ -74,14 +74,17 @@ export function StatsCards({ asteroids }: StatsCardsProps) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {stats.map((stat) => (
-        <Card key={stat.label} className="transition-shadow hover:shadow-md">
+        <Card
+          key={stat.label}
+          className="border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5"
+        >
           <CardContent className="flex items-start gap-3 p-4">
             <div className="mt-0.5 shrink-0">{stat.icon}</div>
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-muted-foreground">{stat.label}</p>
-              <p className="truncate text-base font-semibold">{stat.value}</p>
+              <p className="text-xs font-medium text-white/50">{stat.label}</p>
+              <p className="truncate text-base font-semibold text-white">{stat.value}</p>
               {stat.description && (
-                <p className="truncate text-xs text-muted-foreground/70">{stat.description}</p>
+                <p className="truncate text-xs text-white/40">{stat.description}</p>
               )}
             </div>
           </CardContent>
@@ -89,4 +92,5 @@ export function StatsCards({ asteroids }: StatsCardsProps) {
       ))}
     </div>
   )
+
 }
