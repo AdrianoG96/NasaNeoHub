@@ -17,7 +17,7 @@ const options: { value: HazardousFilterValue; label: string }[] = [
 
 export function HazardousFilter({ value, onChange, totalCount, filteredCount }: HazardousFilterProps) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
       <div className="flex rounded-lg border bg-muted p-0.5" role="tablist" aria-label="Filtro asteroidi pericolosi">
         {options.map((option) => (
           <button

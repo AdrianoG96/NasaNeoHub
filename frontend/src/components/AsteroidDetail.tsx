@@ -91,7 +91,7 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
 
   return (
     <Dialog open={!!asteroidId} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-h-[85vh] w-full max-w-2xl overflow-y-auto sm:max-w-3xl">
+      <DialogContent className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto p-4 sm:max-w-3xl sm:p-6">
         {isLoading && <DetailSkeleton />}
 
         {error && <DetailError message={error} onRetry={loadDetail} />}

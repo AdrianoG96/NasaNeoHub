@@ -8,6 +8,7 @@ const columnWidths = ["w-32", "w-28", "w-36", "w-32", "w-20"]
 
 export function TableSkeleton() {
   return (
+    <div className="overflow-x-auto">
     <Table>
       <TableHeader>
         <TableRow>
@@ -30,5 +31,6 @@ export function TableSkeleton() {
         ))}
       </TableBody>
     </Table>
+    </div>
   )
 }

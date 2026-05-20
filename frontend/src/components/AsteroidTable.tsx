@@ -34,6 +34,7 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
   }
 
   return (
+    <div className="overflow-x-auto">
     <Table>
       <TableHeader>
         <TableRow>
@@ -89,5 +90,6 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
         )}
       </TableBody>
     </Table>
+    </div>
   )
 }

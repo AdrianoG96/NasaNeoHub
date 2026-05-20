@@ -6,8 +6,9 @@ import { DateRangeSelector } from "@/components/DateRangeSelector"
 import { HazardousFilter } from "@/components/HazardousFilter"
 import { AsteroidTable } from "@/components/AsteroidTable"
 import { TableSkeleton } from "@/components/TableSkeleton"
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle, BarChart3, ScatterChartIcon } from "lucide-react"
+import { ErrorAlert } from "@/components/ErrorAlert"
+import { EmptyState } from "@/components/EmptyState"
+import { BarChart3, ScatterChartIcon } from "lucide-react"
 import { fetchAsteroidFeed } from "@/lib/api"
 import { DistanceScatterChart } from "@/components/DistanceScatterChart"
 import { DiameterBarChart } from "@/components/DiameterBarChart"
@@ -88,11 +89,7 @@ export function AsteroidDashboard() {
       </Card>
 
       {error && (
-        <Alert variant="destructive">
-          <AlertCircle className="size-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <ErrorAlert message={error} onDismiss={() => setError(null)} />
       )}
 
       {asteroids.length > 0 && (
@@ -157,11 +154,17 @@ export function AsteroidDashboard() {
       )}
 
       {!isLoading && asteroids.length === 0 && !error && (
-        <Card>
-          <CardContent className="py-12 text-center text-muted-foreground">
-            <p>Select a date range and click Search to explore near-Earth asteroids.</p>
-          </CardContent>
-        </Card>
+        <EmptyState
+          title="Seleziona un intervallo di date"
+          subtitle="Scegli una data di inizio e fine, poi clicca Search per esplorare gli asteroidi vicini alla Terra."
+        />
+      )}
+
+      {!isLoading && asteroids.length > 0 && filteredAsteroids.length === 0 && (
+        <EmptyState
+          title="Nessun asteroide corrisponde al filtro"
+          subtitle="Prova a cambiare il filtro Hazardous per vedere più risultati."
+        />
       )}
 
       <AsteroidDetail
