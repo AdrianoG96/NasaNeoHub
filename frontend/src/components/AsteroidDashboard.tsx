@@ -8,11 +8,16 @@ import { AsteroidTable } from "@/components/AsteroidTable"
 import { TableSkeleton } from "@/components/TableSkeleton"
 import { ErrorAlert } from "@/components/ErrorAlert"
 import { EmptyState } from "@/components/EmptyState"
-import { BarChart3, ScatterChartIcon } from "lucide-react"
+import { StatsCards } from "@/components/StatsCards"
+import { HazardAlert } from "@/components/HazardAlert"
+import { OrbitVisualization } from "@/components/OrbitVisualization"
+import { BarChart3, ScatterChartIcon, OrbitIcon, Download } from "lucide-react"
 import { fetchAsteroidFeed } from "@/lib/api"
+import { generateCsv } from "@/lib/csv"
 import { DistanceScatterChart } from "@/components/DistanceScatterChart"
 import { DiameterBarChart } from "@/components/DiameterBarChart"
 import { AsteroidDetail } from "@/components/AsteroidDetail"
+import { Button } from "@/components/ui/button"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
 export function AsteroidDashboard() {
@@ -24,12 +29,41 @@ export function AsteroidDashboard() {
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
   const [selectedAsteroidId, setSelectedAsteroidId] = useState<string | null>(null)
+  const [currentRange, setCurrentRange] = useState<{ start: string; end: string } | null>(null)
+  const [show3D, setShow3D] = useState(false)
+
+  const filteredAsteroids = useMemo(() => {
+    let result = [...asteroids]
+
+    if (hazardousFilter === "hazardous") {
+      result = result.filter((a) => a.is_potentially_hazardous_asteroid)
+    } else if (hazardousFilter === "non-hazardous") {
+      result = result.filter((a) => !a.is_potentially_hazardous_asteroid)
+    }
+
+    if (sortField) {
+      result.sort((a, b) => {
+        const aVal = a[sortField]
+        const bVal = b[sortField]
+        return sortDirection === "asc" ? aVal - bVal : bVal - aVal
+      })
+    }
+
+    return result
+  }, [asteroids, hazardousFilter, sortField, sortDirection])
+
+  const hazardousCount = useMemo(
+    () => asteroids.filter((a) => a.is_potentially_hazardous_asteroid).length,
+    [asteroids]
+  )
 
   const handleSearch = useCallback(async (startDate: string, endDate: string) => {
     setIsLoading(true)
     setError(null)
     setAsteroids([])
     setTotal(0)
+    setCurrentRange({ start: startDate, end: endDate })
+    setShow3D(false)
 
     try {
       const data = await fetchAsteroidFeed(startDate, endDate)
@@ -57,25 +91,11 @@ export function AsteroidDashboard() {
     setSelectedAsteroidId(id)
   }, [])
 
-  const filteredAsteroids = useMemo(() => {
-    let result = [...asteroids]
-
-    if (hazardousFilter === "hazardous") {
-      result = result.filter((a) => a.is_potentially_hazardous_asteroid)
-    } else if (hazardousFilter === "non-hazardous") {
-      result = result.filter((a) => !a.is_potentially_hazardous_asteroid)
+  const handleExportCsv = useCallback(() => {
+    if (currentRange && filteredAsteroids.length > 0) {
+      generateCsv(filteredAsteroids, currentRange.start, currentRange.end)
     }
-
-    if (sortField) {
-      result.sort((a, b) => {
-        const aVal = a[sortField]
-        const bVal = b[sortField]
-        return sortDirection === "asc" ? aVal - bVal : bVal - aVal
-      })
-    }
-
-    return result
-  }, [asteroids, hazardousFilter, sortField, sortDirection])
+  }, [filteredAsteroids, currentRange])
 
   return (
     <div className="flex flex-col gap-6">
@@ -94,6 +114,18 @@ export function AsteroidDashboard() {
 
       {asteroids.length > 0 && (
         <>
+          {/* Stats Cards */}
+          <StatsCards asteroids={asteroids} />
+
+          {/* Hazard Alert */}
+          <HazardAlert
+            hazardousCount={hazardousCount}
+            totalCount={total}
+            onSetFilter={setHazardousFilter}
+            onDismiss={() => {}}
+          />
+
+          {/* Distance Over Time Chart */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -110,6 +142,7 @@ export function AsteroidDashboard() {
             </CardContent>
           </Card>
 
+          {/* Diameter Distribution Chart */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -126,17 +159,59 @@ export function AsteroidDashboard() {
             </CardContent>
           </Card>
 
+          {/* 3D Orbit Visualization */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <OrbitIcon className="size-5" />
+                3D Orbit Visualization
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {show3D ? (
+                <OrbitVisualization
+                  asteroids={filteredAsteroids}
+                  onAsteroidClick={handleAsteroidClick}
+                />
+              ) : (
+                <div className="flex flex-col items-center gap-3 py-8">
+                  <OrbitIcon className="size-12 text-muted-foreground/40" />
+                  <p className="text-sm text-muted-foreground">
+                    Explore asteroid orbits in 3D space
+                  </p>
+                  <Button variant="outline" onClick={() => setShow3D(true)}>
+                    Load 3D Visualization
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Asteroids Table */}
           <Card>
             <CardHeader>
               <CardTitle>Asteroids</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-              <HazardousFilter
-                value={hazardousFilter}
-                onChange={setHazardousFilter}
-                totalCount={total}
-                filteredCount={filteredAsteroids.length}
-              />
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <HazardousFilter
+                  value={hazardousFilter}
+                  onChange={setHazardousFilter}
+                  totalCount={total}
+                  filteredCount={filteredAsteroids.length}
+                />
+                {filteredAsteroids.length > 0 && currentRange && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleExportCsv}
+                    className="flex items-center gap-2"
+                  >
+                    <Download className="size-4" />
+                    Export CSV
+                  </Button>
+                )}
+              </div>
               {isLoading ? (
                 <TableSkeleton />
               ) : (
