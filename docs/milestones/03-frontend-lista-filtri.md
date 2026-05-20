@@ -11,20 +11,20 @@
 **Così da** avere una panoramica chiara e veloce degli oggetti vicini alla Terra.
 
 ### Tasks
-- [ ] Creare il componente `AsteroidTable` con Shadcn `<Table>`
-- [ ] Colonne della tabella:
+- [x] Creare il componente `AsteroidTable` con Shadcn `<Table>`
+- [x] Colonne della tabella:
   - **Name** — nome dell'asteroide
   - **Min Distance (km)** — distanza minima di avvicinamento
   - **Diameter (km)** — diametro stimato (min – max)
   - **Velocity (km/h)** — velocità relativa
   - **Hazardous** — badge rosso "Yes" / badge verde "No"
-- [ ] Formattare i numeri con separatore delle migliaia e decimali significativi
-- [ ] Righe cliccabili che chiamano `onAsteroidClick(asteroidId)`
+- [x] Formattare i numeri con separatore delle migliaia e decimali significativi
+- [x] Righe cliccabili che chiamano `onAsteroidClick(asteroidId)`
 
 ### Criteri di Accettazione
-- [ ] La tabella si popola con i dati ricevuti dall'API
-- [ ] I dati sono formattati correttamente (es. "1,234,567 km")
-- [ ] Il badge Hazardous è rosso per `true`, verde per `false`
+- [x] La tabella si popola con i dati ricevuti dall'API
+- [x] I dati sono formattati correttamente (es. "1,234,567 km")
+- [x] Il badge Hazardous è rosso per `true`, verde per `false`
 
 ---
 
@@ -35,21 +35,21 @@
 **Così da** esplorare diversi periodi di osservazione.
 
 ### Tasks
-- [ ] Creare il componente `DateRangeSelector` con:
+- [x] Creare il componente `DateRangeSelector` con:
   - Input "Start Date" (Shadcn Calendar/Popover)
   - Input "End Date" (Shadcn Calendar/Popover)
   - Bottone "Search" per avviare la ricerca
-- [ ] Validazione lato frontend:
+- [x] Validazione lato frontend:
   - End date >= Start date
   - Range massimo configurabile (es. 30 giorni)
   - Date non future
-- [ ] Stato di loading sul bottone durante il fetch
-- [ ] Disabilitare il bottone se le date non sono valide
+- [x] Stato di loading sul bottone durante il fetch
+- [x] Disabilitare il bottone se le date non sono valide
 
 ### Criteri di Accettazione
-- [ ] L'utente può selezionare date con il calendario
-- [ ] Date non valide mostrano un messaggio di errore
-- [ ] Il bottone "Search" è disabilitato finché le date non sono valide
+- [x] L'utente può selezionare date con il calendario
+- [x] Date non valide mostrano un messaggio di errore
+- [x] Il bottone "Search" è disabilitato finché le date non sono valide
 
 ---
 
@@ -60,15 +60,15 @@
 **Così da** concentrarmi solo su quelli che mi interessano.
 
 ### Tasks
-- [ ] Creare un filtro a tabs o dropdown sopra la tabella
-- [ ] Opzioni: "All", "Hazardous Only", "Non-Hazardous Only"
-- [ ] Il filtro è client-side (opera sui dati già caricati)
-- [ ] Aggiornare il conteggio visibile: "Showing X of Y asteroids"
+- [x] Creare un filtro a tabs o dropdown sopra la tabella
+- [x] Opzioni: "All", "Hazardous Only", "Non-Hazardous Only"
+- [x] Il filtro è client-side (opera sui dati già caricati)
+- [x] Aggiornare il conteggio visibile: "Showing X of Y asteroids"
 
 ### Criteri di Accettazione
-- [ ] Selezionando "Hazardous Only" si vedono solo gli asteroidi pericolosi
-- [ ] Selezionando "All" si vede l'intera lista
-- [ ] Il conteggio si aggiorna dinamicamente
+- [x] Selezionando "Hazardous Only" si vedono solo gli asteroidi pericolosi
+- [x] Selezionando "All" si vede l'intera lista
+- [x] Il conteggio si aggiorna dinamicamente
 
 ---
 
@@ -79,18 +79,18 @@
 **Così da** trovare facilmente l'asteroide più vicino o più grande.
 
 ### Tasks
-- [ ] Rendere le intestazioni delle colonne cliccabili per:
+- [x] Rendere le intestazioni delle colonne cliccabili per:
   - Min Distance
   - Diameter
   - Velocity
-- [ ] Implementare ordinamento client-side (toggle asc/desc)
-- [ ] Mostrare indicatore freccia (▲/▼) sulla colonna attiva
-- [ ] Mantenere il filtro "Hazardous" attivo durante l'ordinamento
+- [x] Implementare ordinamento client-side (toggle asc/desc)
+- [x] Mostrare indicatore freccia (▲/▼) sulla colonna attiva
+- [x] Mantenere il filtro "Hazardous" attivo durante l'ordinamento
 
 ### Criteri di Accettazione
-- [ ] Click su "Min Distance" ordina per distanza crescente
-- [ ] Secondo click ordina per distanza decrescente
-- [ ] L'indicatore mostra la direzione corrente
+- [x] Click su "Min Distance" ordina per distanza crescente
+- [x] Secondo click ordina per distanza decrescente
+- [x] L'indicatore mostra la direzione corrente
 
 ---
 
@@ -101,12 +101,12 @@
 **Così da** sapere che qualcosa sta succedendo e non vedere una pagina vuota.
 
 ### Tasks
-- [ ] Creare componente `TableSkeleton` con Shadcn `<Skeleton>`
-- [ ] Mostrare 5 righe placeholder con larghezze variabili
-- [ ] Mostrare lo scheletro durante il fetch dei dati
-- [ ] Sostituire con la tabella reale quando i dati arrivano
+- [x] Creare componente `TableSkeleton` con Shadcn `<Skeleton>`
+- [x] Mostrare 5 righe placeholder con larghezze variabili
+- [x] Mostrare lo scheletro durante il fetch dei dati
+- [x] Sostituire con la tabella reale quando i dati arrivano
 
 ### Criteri di Accettazione
-- [ ] Durante il caricamento, si vede lo skeleton e non la tabella vuota
-- [ ] Lo skeleton ha un aspetto naturale (righe di diversa larghezza)
-- [ ] Transizione fluida da skeleton a tabella
+- [x] Durante il caricamento, si vede lo skeleton e non la tabella vuota
+- [x] Lo skeleton ha un aspetto naturale (righe di diversa larghezza)
+- [x] Transizione fluida da skeleton a tabella
