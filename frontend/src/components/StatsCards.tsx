@@ -1,10 +1,10 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { AsteroidSummary } from "@/lib/types"
 import { formatNumber } from "@/lib/format"
-import { OrbitIcon, RulerIcon, AlertTriangleIcon, MaximizeIcon, PercentIcon } from "lucide-react"
+import { OrbitIcon, RulerIcon, AlertTriangleIcon, MaximizeIcon } from "lucide-react"
 
 interface StatsCardsProps {
   asteroids: AsteroidSummary[]
@@ -15,6 +15,40 @@ interface StatCard {
   value: string
   icon: React.ReactNode
   description?: string
+  numericValue?: number
+}
+
+function AnimatedStatValue({ value, suffix = "" }: { value: string; suffix?: string }) {
+  const [display, setDisplay] = useState(0)
+  const numericValue = Number.parseFloat(value.replace(/,/g, ""))
+  const isNumeric = !Number.isNaN(numericValue)
+
+  useEffect(() => {
+    if (!isNumeric || numericValue === 0) {
+      setDisplay(0)
+      return
+    }
+    const duration = 800
+    const steps = 20
+    const increment = numericValue / steps
+    let current = 0
+    const timer = setInterval(() => {
+      current += increment
+      if (current >= numericValue) {
+        setDisplay(numericValue)
+        clearInterval(timer)
+      } else {
+        setDisplay(Math.floor(current))
+      }
+    }, duration / steps)
+    return () => clearInterval(timer)
+  }, [numericValue, isNumeric])
+
+  if (isNumeric) {
+    return <span className="animate-count">{display.toLocaleString("en-US")}{suffix}</span>
+  }
+
+  return <span>{value}</span>
 }
 
 export function StatsCards({ asteroids }: StatsCardsProps) {
@@ -42,6 +76,7 @@ export function StatsCards({ asteroids }: StatsCardsProps) {
         label: "Total Asteroids",
         value: formatNumber(total),
         icon: <OrbitIcon className="size-5 text-blue-500" />,
+        numericValue: total,
       },
       {
         label: "Average Distance",
@@ -72,17 +107,23 @@ export function StatsCards({ asteroids }: StatsCardsProps) {
   if (stats.length === 0) return null
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+    <div className="animate-stagger grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
       {stats.map((stat) => (
         <Card
           key={stat.label}
-          className="border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5"
+          className="group border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5"
         >
           <CardContent className="flex items-start gap-3 p-4">
-            <div className="mt-0.5 shrink-0">{stat.icon}</div>
+            <div className="mt-0.5 shrink-0 transition-transform duration-300 group-hover:scale-110">{stat.icon}</div>
             <div className="min-w-0 flex-1">
               <p className="text-xs font-medium text-white/50">{stat.label}</p>
-              <p className="truncate text-base font-semibold text-white">{stat.value}</p>
+              <p className="truncate text-base font-semibold text-white">
+                {stat.numericValue ? (
+                  <AnimatedStatValue value={formatNumber(stat.numericValue)} />
+                ) : (
+                  stat.value
+                )}
+              </p>
               {stat.description && (
                 <p className="truncate text-xs text-white/40">{stat.description}</p>
               )}

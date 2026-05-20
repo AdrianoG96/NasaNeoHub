@@ -12,6 +12,7 @@ import { AsteroidTable } from "@/components/AsteroidTable"
 import { HazardousFilter } from "@/components/HazardousFilter"
 import { TableSkeleton } from "@/components/TableSkeleton"
 import { KeyInsights } from "@/components/KeyInsights"
+import { LoadingState } from "@/components/LoadingState"
 import { generateCsv } from "@/lib/csv"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
@@ -94,7 +95,7 @@ export function DashboardTabs({
       </div>
 
       {/* Tab Content */}
-      <div className="transition-all duration-300">
+      <div className="transition-all duration-300 animate-fade-in-up">
         {activeTab === "overview" && (
           <div className="space-y-4">
             <KeyInsights asteroids={filteredAsteroids} />
@@ -106,24 +107,24 @@ export function DashboardTabs({
               onDismiss={() => {}}
             />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:border-white/20">
                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
                   <ScatterChartIcon className="size-4 text-blue-400" />
                   Distance Over Time
                 </h3>
                 {isLoading ? (
-                  <div className="flex h-48 items-center justify-center text-sm text-white/40">Loading chart...</div>
+                  <LoadingState variant="charts" />
                 ) : (
                   <DistanceScatterChart asteroids={filteredAsteroids} />
                 )}
               </div>
-              <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:border-white/20">
                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
                   <BarChart3 className="size-4 text-blue-400" />
                   Diameter Distribution
                 </h3>
                 {isLoading ? (
-                  <div className="flex h-48 items-center justify-center text-sm text-white/40">Loading chart...</div>
+                  <LoadingState variant="charts" />
                 ) : (
                   <DiameterBarChart asteroids={filteredAsteroids} />
                 )}
@@ -146,7 +147,7 @@ export function DashboardTabs({
                   variant="outline"
                   size="sm"
                   onClick={handleExportCsv}
-                  className="flex items-center gap-2 border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                  className="flex items-center gap-2 border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all duration-200"
                 >
                   <Download className="size-4" />
                   Export CSV
@@ -154,7 +155,7 @@ export function DashboardTabs({
               )}
             </div>
             {isLoading ? (
-              <TableSkeleton />
+              <LoadingState variant="table" message="Loading asteroid data..." />
             ) : (
               <AsteroidTable
                 asteroids={filteredAsteroids}
@@ -169,24 +170,24 @@ export function DashboardTabs({
 
         {activeTab === "charts" && (
           <div className="space-y-4">
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:border-white/20">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
                 <ScatterChartIcon className="size-4 text-blue-400" />
                 Distance Over Time
               </h3>
               {isLoading ? (
-                <div className="flex h-64 items-center justify-center text-sm text-white/40">Loading chart...</div>
+                <LoadingState variant="charts" />
               ) : (
                 <DistanceScatterChart asteroids={filteredAsteroids} />
               )}
             </div>
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:border-white/20">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
                 <BarChart3 className="size-4 text-blue-400" />
                 Diameter Distribution
               </h3>
               {isLoading ? (
-                <div className="flex h-64 items-center justify-center text-sm text-white/40">Loading chart...</div>
+                <LoadingState variant="charts" />
               ) : (
                 <DiameterBarChart asteroids={filteredAsteroids} />
               )}
@@ -195,7 +196,7 @@ export function DashboardTabs({
         )}
 
         {activeTab === "3d" && (
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4 transition-all duration-300 hover:border-white/20">
             <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold text-white/80">
               <OrbitIcon className="size-4 text-blue-400" />
               3D Orbit Visualization
@@ -214,7 +215,7 @@ export function DashboardTabs({
                 <Button
                   variant="outline"
                   onClick={() => setShow3D(true)}
-                  className="border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+                  className="border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all duration-200"
                 >
                   Load 3D Visualization
                 </Button>

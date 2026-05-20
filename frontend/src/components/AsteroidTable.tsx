@@ -46,7 +46,7 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
               onClick={() => col.sortable && handleSort(col.key)}
               tabIndex={col.sortable ? 0 : undefined}
               onKeyDown={col.sortable ? (e) => e.key === "Enter" && handleSort(col.key) : undefined}
-              aria-label={col.sortable ? `Ordina per ${col.label}` : col.label}
+              aria-label={col.sortable ? `Sort by ${col.label}` : col.label}
             >
               {col.label}
               {col.sortable && (
@@ -65,22 +65,24 @@ export function AsteroidTable({ asteroids, sortField, sortDirection, onSort, onA
             </TableCell>
           </TableRow>
         ) : (
-          asteroids.map((asteroid) => (
+          asteroids.map((asteroid, index) => (
             <TableRow
               key={asteroid.id}
-              className="cursor-pointer border-white/5 transition-colors hover:bg-white/5"
+              className={`cursor-pointer border-white/5 transition-colors hover:bg-white/5 ${
+                index % 2 === 1 ? "bg-white/[0.02]" : ""
+              }`}
               onClick={() => onAsteroidClick(asteroid.id)}
               tabIndex={0}
               onKeyDown={(e) => e.key === "Enter" && onAsteroidClick(asteroid.id)}
-              aria-label={`Dettagli per ${asteroid.name}`}
+              aria-label={`Details for ${asteroid.name}`}
             >
               <TableCell className="font-medium text-white">{asteroid.name}</TableCell>
-              <TableCell className="text-white/70">{formatDistance(asteroid.miss_distance_km)}</TableCell>
-              <TableCell className="text-white/70">{formatDiameter(asteroid.estimated_diameter_min_km, asteroid.estimated_diameter_max_km)}</TableCell>
-              <TableCell className="text-white/70">{formatVelocity(asteroid.relative_velocity_kph)}</TableCell>
+              <TableCell className="text-white/70 font-mono text-sm">{formatDistance(asteroid.miss_distance_km)}</TableCell>
+              <TableCell className="text-white/70 font-mono text-sm">{formatDiameter(asteroid.estimated_diameter_min_km, asteroid.estimated_diameter_max_km)}</TableCell>
+              <TableCell className="text-white/70 font-mono text-sm">{formatVelocity(asteroid.relative_velocity_kph)}</TableCell>
               <TableCell>
                 {asteroid.is_potentially_hazardous_asteroid ? (
-                  <Badge variant="destructive" className="animate-pulse">Yes</Badge>
+                  <Badge variant="destructive" className="animate-glow-pulse">Yes</Badge>
                 ) : (
                   <Badge variant="outline" className="border-green-500/50 text-green-400">No</Badge>
                 )}

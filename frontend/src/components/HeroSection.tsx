@@ -69,7 +69,7 @@ export function HeroSection() {
             variant="outline"
             size="icon"
             onClick={toggleTheme}
-            className="shrink-0 border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white"
+            className="shrink-0 border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all duration-200 hover:scale-105"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
           >
             {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
@@ -90,7 +90,7 @@ export function HeroSection() {
           </div>
 
           {/* Did you know? */}
-          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-3 py-2">
+          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-3 py-2 transition-all duration-300 hover:border-yellow-500/30 hover:bg-yellow-500/10">
             <span className="mt-0.5 shrink-0 text-sm">💡</span>
             <p className="text-xs leading-relaxed text-yellow-200/80 sm:text-sm">{fact}</p>
           </div>

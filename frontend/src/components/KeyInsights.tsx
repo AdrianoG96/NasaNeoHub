@@ -73,7 +73,7 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
   }, [value])
 
   return (
-    <span>
+    <span className="font-mono">
       {display.toLocaleString("en-US")}{suffix}
     </span>
   )
@@ -146,11 +146,11 @@ export function KeyInsights({ asteroids }: KeyInsightsProps) {
         <Lightbulb className="size-4 text-yellow-400" />
         <h2 className="text-sm font-semibold text-white/80">Key Insights</h2>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="animate-stagger grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {insights.map((insight) => (
           <Card
             key={insight.title}
-            className="group border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5"
+            className="group border-white/10 bg-white/5 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-0.5"
           >
             <CardContent className="p-4">
               <div className="mb-2 flex items-center gap-2">

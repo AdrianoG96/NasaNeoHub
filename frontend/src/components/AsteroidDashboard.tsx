@@ -10,6 +10,8 @@ import { DiscoveryBadges, incrementSearchCount } from "@/components/DiscoveryBad
 import { AsteroidCompare } from "@/components/AsteroidCompare"
 import { GlossaryDialog } from "@/components/GlossaryDialog"
 import { AsteroidDetail } from "@/components/AsteroidDetail"
+import { LoadingState } from "@/components/LoadingState"
+import { useToast } from "@/components/ToastProvider"
 import { fetchAsteroidFeed } from "@/lib/api"
 import { Search, BookOpen, ArrowLeftRight } from "lucide-react"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
@@ -24,6 +26,7 @@ export function AsteroidDashboard() {
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
   const [selectedAsteroidId, setSelectedAsteroidId] = useState<string | null>(null)
   const [currentRange, setCurrentRange] = useState<{ start: string; end: string } | null>(null)
+  const { addToast } = useToast()
 
   const filteredAsteroids = useMemo(() => {
     let result = [...asteroids]
@@ -62,12 +65,32 @@ export function AsteroidDashboard() {
       setAsteroids(data.asteroids)
       setTotal(data.total)
       incrementSearchCount()
+
+      if (data.asteroids.length > 0) {
+        addToast({
+          type: "success",
+          title: `Found ${data.total} asteroids`,
+          message: `${data.asteroids.filter((a) => a.is_potentially_hazardous_asteroid).length} potentially hazardous`,
+        })
+      } else {
+        addToast({
+          type: "info",
+          title: "No asteroids found",
+          message: "Try a different date range",
+        })
+      }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Errore durante il caricamento dei dati")
+      const errorMessage = err instanceof Error ? err.message : "Errore durante il caricamento dei dati"
+      setError(errorMessage)
+      addToast({
+        type: "error",
+        title: "Error loading data",
+        message: errorMessage,
+      })
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [addToast])
 
   const handleSort = useCallback((field: SortField) => {
     setSortField((prev) => {
@@ -114,6 +137,14 @@ export function AsteroidDashboard() {
         <ErrorAlert message={error} onDismiss={() => setError(null)} />
       )}
 
+      {/* Loading State */}
+      {isLoading && asteroids.length === 0 && (
+        <div className="space-y-4">
+          <LoadingState variant="cards" message="Fetching asteroid data from NASA..." />
+          <LoadingState variant="table" />
+        </div>
+      )}
+
       {asteroids.length > 0 && (
         <DashboardTabs
           asteroids={asteroids}
@@ -152,5 +183,3 @@ export function AsteroidDashboard() {
     </div>
   )
 }
-
-

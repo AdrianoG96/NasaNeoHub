@@ -36,9 +36,9 @@ export function HazardAlert({ hazardousCount, totalCount, onSetFilter, onDismiss
   }
 
   return (
-    <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-      <Alert variant="destructive" className="relative border-red-500/50 bg-red-500/10 pr-12">
-        <AlertTriangle className="size-5 text-red-500" />
+    <div className="animate-fade-in-up">
+      <Alert variant="destructive" className="relative border-red-500/50 bg-red-500/10 pr-12 shadow-lg shadow-red-500/5">
+        <AlertTriangle className="size-5 text-red-500 animate-pulse" />
         <AlertTitle className="text-red-600 dark:text-red-400">
           ⚠️ Attention: {hazardousCount} Potentially Hazardous Asteroid{hazardousCount > 1 ? "s" : ""} Detected
         </AlertTitle>
