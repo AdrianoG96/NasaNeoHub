@@ -11,23 +11,23 @@
 **Così da** visualizzare la distribuzione temporale degli asteroidi e identificare periodi di maggiore attività.
 
 ### Tasks
-- [ ] Installare `recharts` nel progetto frontend
-- [ ] Creare il componente `DistanceScatterChart`
-- [ ] Asse X: `close_approach_date` (formato data)
-- [ ] Asse Y: `miss_distance_km` (scala logaritmica opzionale per gestire outlier)
-- [ ] Colore punti: rosso per asteroidi pericolosi, blu per non pericolosi
-- [ ] Tooltip al passaggio del mouse che mostra:
+- [x] Installare `recharts` nel progetto frontend
+- [x] Creare il componente `DistanceScatterChart`
+- [x] Asse X: `close_approach_date` (formato data)
+- [x] Asse Y: `miss_distance_km` (scala logaritmica opzionale per gestire outlier)
+- [x] Colore punti: rosso per asteroidi pericolosi, blu per non pericolosi
+- [x] Tooltip al passaggio del mouse che mostra:
   - Nome asteroide
   - Data
   - Distanza (km)
   - Pericolosità
-- [ ] Responsive container (`ResponsiveContainer`)
+- [x] Responsive container (`ResponsiveContainer`)
 
 ### Criteri di Accettazione
-- [ ] Il grafico si popola con i dati correnti
-- [ ] I punti sono colorati in base alla pericolosità
-- [ ] Il tooltip mostra informazioni dettagliate
-- [ ] Il grafico è responsive
+- [x] Il grafico si popola con i dati correnti
+- [x] I punti sono colorati in base alla pericolosità
+- [x] Il tooltip mostra informazioni dettagliate
+- [x] Il grafico è responsive
 
 ---
 
@@ -38,17 +38,17 @@
 **Così da** capire rapidamente la composizione dimensionale della popolazione di asteroidi.
 
 ### Tasks
-- [ ] Creare il componente `DiameterBarChart`
-- [ ] Asse X: bin di diametro (es. 0-0.1km, 0.1-0.5km, 0.5-1km, 1-5km, 5+ km)
-- [ ] Asse Y: conteggio asteroidi per bin
-- [ ] Colore delle barre: gradiente o colore fisso
-- [ ] Tooltip che mostra: range diametro, conteggio, percentuale sul totale
+- [x] Creare il componente `DiameterBarChart`
+- [x] Asse X: bin di diametro (es. 0-0.1km, 0.1-0.5km, 0.5-1km, 1-5km, 5+ km)
+- [x] Asse Y: conteggio asteroidi per bin
+- [x] Colore delle barre: gradiente o colore fisso
+- [x] Tooltip che mostra: range diametro, conteggio, percentuale sul totale
 - [ ] Opzionale: overlay con linea di media/mediana
 
 ### Criteri di Accettazione
-- [ ] L'istogramma mostra la distribuzione dei diametri
-- [ ] I bin sono significativi e coprono tutto il range
-- [ ] Il tooltip mostra conteggio e percentuale
+- [x] L'istogramma mostra la distribuzione dei diametri
+- [x] I bin sono significativi e coprono tutto il range
+- [x] Il tooltip mostra conteggio e percentuale
 
 ---
 
@@ -59,13 +59,13 @@
 **Così da** esplorare i dati in dettaglio.
 
 ### Tasks
-- [ ] Aggiungere `Tooltip` personalizzato a entrambi i grafici
-- [ ] Aggiungere `Brush` di Recharts per selezionare intervalli temporali nello scatter
-- [ ] Aggiungere legenda interattiva (click per mostrare/nascondere serie)
-- [ ] Rendere i grafici responsive con `ResponsiveContainer`
+- [x] Aggiungere `Tooltip` personalizzato a entrambi i grafici
+- [x] Aggiungere `Brush` di Recharts per selezionare intervalli temporali nello scatter
+- [x] Aggiungere legenda interattiva (click per mostrare/nascondere serie)
+- [x] Rendere i grafici responsive con `ResponsiveContainer`
 
 ### Criteri di Accettazione
-- [ ] Tooltip funzionante su entrambi i grafici
-- [ ] Brush permette di selezionare un intervallo nello scatter
-- [ ] Legenda cliccabile per filtrare serie
-- [ ] I grafici si ridimensionano con la finestra
+- [x] Tooltip funzionante su entrambi i grafici
+- [x] Brush permette di selezionare un intervallo nello scatter
+- [x] Legenda cliccabile per filtrare serie
+- [x] I grafici si ridimensionano con la finestra
