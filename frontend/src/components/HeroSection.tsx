@@ -22,8 +22,10 @@ export function HeroSection() {
   const { theme, toggleTheme } = useTheme()
   const [fact, setFact] = useState(COSMIC_FACTS[0])
   const [time, setTime] = useState(new Date())
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     setFact(COSMIC_FACTS[Math.floor(Math.random() * COSMIC_FACTS.length)])
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)
@@ -84,8 +86,8 @@ export function HeroSection() {
               <Moon className="size-5 text-blue-300" />
             </div>
             <div>
-              <p className="font-mono text-lg font-semibold text-white">{formatTime(time)}</p>
-              <p className="text-xs text-blue-200/60">{formatDate(time)} UTC</p>
+              <p className="font-mono text-lg font-semibold text-white" suppressHydrationWarning>{formatTime(time)}</p>
+              <p className="text-xs text-blue-200/60" suppressHydrationWarning>{formatDate(time)} UTC</p>
             </div>
           </div>
 
