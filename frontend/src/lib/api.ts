@@ -1,4 +1,4 @@
-import type { FeedResponse, AsteroidSummary } from "@/lib/types"
+import type { FeedResponse, AsteroidDetail } from "@/lib/types"
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
@@ -17,7 +17,7 @@ export async function fetchAsteroidFeed(
   return response.json()
 }
 
-export async function fetchAsteroidDetail(id: string): Promise<AsteroidSummary> {
+export async function fetchAsteroidDetail(id: string): Promise<AsteroidDetail> {
   const response = await fetch(`${API_BASE_URL}/api/neo/${id}`)
 
   if (!response.ok) {

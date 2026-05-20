@@ -11,9 +11,9 @@
 **Così da** vedere tutte le informazioni approfondite sull'oggetto selezionato.
 
 ### Tasks
-- [ ] Creare il componente `AsteroidDetail` (Dialog modale o pagina `/neo/[id]`)
-- [ ] Al click su una riga della tabella, chiamare `GET /api/neo/{id}`
-- [ ] Mostrare nella scheda:
+- [x] Creare il componente `AsteroidDetail` (Dialog modale)
+- [x] Al click su una riga della tabella, chiamare `GET /api/neo/{id}`
+- [x] Mostrare nella scheda:
   - **Nome** (grande, in evidenza)
   - **ID** (secondario)
   - **Diametro stimato** (min/max in km e metri)
@@ -22,12 +22,12 @@
   - **Distanza minima** (km)
   - **Data di avvicinamento**
   - **Link "View on NASA JPL"** (apre in nuova tab)
-- [ ] Bottone "Close" per chiudere la scheda
+- [x] Bottone "Close" per chiudere la scheda
 
 ### Criteri di Accettazione
-- [ ] Click su riga apre la scheda con i dati dell'asteroide
-- [ ] I dati sono caricati dall'endpoint di dettaglio
-- [ ] Il link NASA JPL si apre in una nuova scheda
+- [x] Click su riga apre la scheda con i dati dell'asteroide
+- [x] I dati sono caricati dall'endpoint di dettaglio
+- [x] Il link NASA JPL si apre in una nuova scheda
 
 ---
 
@@ -38,19 +38,19 @@
 **Così da** capire quando e come l'asteroide si è avvicinato alla Terra in passato.
 
 ### Tasks
-- [ ] Sezione "Close Approach History" nella scheda dettaglio
-- [ ] Tabella con colonne:
+- [x] Sezione "Close Approach History" nella scheda dettaglio
+- [x] Tabella con colonne:
   - **Date** — data dell'approccio
   - **Miss Distance (km)** — distanza minima
   - **Relative Velocity (km/h)** — velocità relativa
   - **Orbiting Body** — corpo orbitante (es. "Earth")
-- [ ] Ordinamento per data (decrescente)
-- [ ] Se ci sono molti record, mostrare i primi 10 con "Show more"
+- [x] Ordinamento per data (decrescente)
+- [x] Se ci sono molti record, mostrare i primi 10 con "Show more"
 
 ### Criteri di Accettazione
-- [ ] La tabella mostra tutti i close approach storici
-- [ ] I dati sono ordinati per data
-- [ ] "Show more" espande la lista completa
+- [x] La tabella mostra tutti i close approach storici
+- [x] I dati sono ordinati per data
+- [x] "Show more" espande la lista completa
 
 ---
 
@@ -61,8 +61,8 @@
 **Così da** approfondire le caratteristiche orbitali dell'asteroide.
 
 ### Tasks
-- [ ] Sezione "Orbital Data" nella scheda dettaglio
-- [ ] Mostrare:
+- [x] Sezione "Orbital Data" nella scheda dettaglio
+- [x] Mostrare:
   - **Orbit ID**
   - **Orbit Determination Date**
   - **Eccentricity**
@@ -73,13 +73,13 @@
   - **Aphelion Distance (AU)**
   - **Orbital Period (days)**
   - **Minimum Orbit Intersection Distance (AU)**
-- [ ] Formattare i numeri con 4 decimali significativi
-- [ ] Bottone "🔗 View on NASA JPL" che apre `nasa_jpl_url`
+- [x] Formattare i numeri con 4 decimali significativi
+- [x] Bottone "🔗 View on NASA JPL" che apre `nasa_jpl_url`
 
 ### Criteri di Accettazione
-- [ ] I dati orbitali sono visualizzati in modo leggibile
-- [ ] Il link NASA JPL funziona e si apre in nuova tab
-- [ ] I numeri sono formattati correttamente
+- [x] I dati orbitali sono visualizzati in modo leggibile
+- [x] Il link NASA JPL funziona e si apre in nuova tab
+- [x] I numeri sono formattati correttamente
 
 ---
 
@@ -90,12 +90,12 @@
 **Così da** non rimanere con una schermata vuota o bloccata.
 
 ### Tasks
-- [ ] Mostrare skeleton loader nella scheda mentre si caricano i dati
-- [ ] Se l'ID non è valido o la chiamata fallisce, mostrare messaggio di errore
-- [ ] Bottone "Retry" per riprovare la chiamata fallita
-- [ ] Se l'asteroide non ha dati orbitali, mostrare "No orbital data available"
+- [x] Mostrare skeleton loader nella scheda mentre si caricano i dati
+- [x] Se l'ID non è valido o la chiamata fallisce, mostrare messaggio di errore
+- [x] Bottone "Retry" per riprovare la chiamata fallita
+- [x] Se l'asteroide non ha dati orbitali, mostrare "No orbital data available"
 
 ### Criteri di Accettazione
-- [ ] Skeleton visibile durante il caricamento
-- [ ] Errore mostrato con messaggio chiaro e bottone Retry
-- [ ] Caso "no data" gestito senza crash
+- [x] Skeleton visibile durante il caricamento
+- [x] Errore mostrato con messaggio chiaro e bottone Retry
+- [x] Caso "no data" gestito senza crash

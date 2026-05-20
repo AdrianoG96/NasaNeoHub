@@ -11,6 +11,7 @@ import { AlertCircle, BarChart3, ScatterChartIcon } from "lucide-react"
 import { fetchAsteroidFeed } from "@/lib/api"
 import { DistanceScatterChart } from "@/components/DistanceScatterChart"
 import { DiameterBarChart } from "@/components/DiameterBarChart"
+import { AsteroidDetail } from "@/components/AsteroidDetail"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
 export function AsteroidDashboard() {
@@ -21,6 +22,7 @@ export function AsteroidDashboard() {
   const [hazardousFilter, setHazardousFilter] = useState<HazardousFilterValue>("all")
   const [sortField, setSortField] = useState<SortField | null>(null)
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc")
+  const [selectedAsteroidId, setSelectedAsteroidId] = useState<string | null>(null)
 
   const handleSearch = useCallback(async (startDate: string, endDate: string) => {
     setIsLoading(true)
@@ -51,8 +53,7 @@ export function AsteroidDashboard() {
   }, [])
 
   const handleAsteroidClick = useCallback((id: string) => {
-    // Will be implemented in a future milestone (asteroid detail)
-    console.log("Asteroid clicked:", id)
+    setSelectedAsteroidId(id)
   }, [])
 
   const filteredAsteroids = useMemo(() => {
@@ -162,6 +163,11 @@ export function AsteroidDashboard() {
           </CardContent>
         </Card>
       )}
+
+      <AsteroidDetail
+        asteroidId={selectedAsteroidId}
+        onClose={() => setSelectedAsteroidId(null)}
+      />
     </div>
   )
 }
