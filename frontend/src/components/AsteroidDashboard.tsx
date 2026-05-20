@@ -7,8 +7,10 @@ import { HazardousFilter } from "@/components/HazardousFilter"
 import { AsteroidTable } from "@/components/AsteroidTable"
 import { TableSkeleton } from "@/components/TableSkeleton"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, BarChart3, ScatterChartIcon } from "lucide-react"
 import { fetchAsteroidFeed } from "@/lib/api"
+import { DistanceScatterChart } from "@/components/DistanceScatterChart"
+import { DiameterBarChart } from "@/components/DiameterBarChart"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
 export function AsteroidDashboard() {
@@ -93,30 +95,64 @@ export function AsteroidDashboard() {
       )}
 
       {asteroids.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Asteroids</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <HazardousFilter
-              value={hazardousFilter}
-              onChange={setHazardousFilter}
-              totalCount={total}
-              filteredCount={filteredAsteroids.length}
-            />
-            {isLoading ? (
-              <TableSkeleton />
-            ) : (
-              <AsteroidTable
-                asteroids={filteredAsteroids}
-                sortField={sortField}
-                sortDirection={sortDirection}
-                onSort={handleSort}
-                onAsteroidClick={handleAsteroidClick}
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ScatterChartIcon className="size-5" />
+                Distance Over Time
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex h-64 items-center justify-center text-muted-foreground">Loading chart...</div>
+              ) : (
+                <DistanceScatterChart asteroids={filteredAsteroids} />
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="size-5" />
+                Diameter Distribution
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex h-64 items-center justify-center text-muted-foreground">Loading chart...</div>
+              ) : (
+                <DiameterBarChart asteroids={filteredAsteroids} />
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Asteroids</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <HazardousFilter
+                value={hazardousFilter}
+                onChange={setHazardousFilter}
+                totalCount={total}
+                filteredCount={filteredAsteroids.length}
               />
-            )}
-          </CardContent>
-        </Card>
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <AsteroidTable
+                  asteroids={filteredAsteroids}
+                  sortField={sortField}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                  onAsteroidClick={handleAsteroidClick}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </>
       )}
 
       {!isLoading && asteroids.length === 0 && !error && (
