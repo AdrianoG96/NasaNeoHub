@@ -31,6 +31,7 @@ def _parse_asteroid_summary(raw: dict, approach_date: str) -> dict:
     close_approach = raw.get("close_approach_data", [{}])[0]
     miss_distance = close_approach.get("miss_distance", {})
     velocity = close_approach.get("relative_velocity", {})
+    orbital_raw = raw.get("orbital_data", {}) or {}
 
     return {
         "id": raw.get("id", ""),
@@ -44,6 +45,12 @@ def _parse_asteroid_summary(raw: dict, approach_date: str) -> dict:
             "is_potentially_hazardous_asteroid", False
         ),
         "nasa_jpl_url": raw.get("nasa_jpl_url", ""),
+        "eccentricity": orbital_raw.get("eccentricity"),
+        "semi_major_axis": orbital_raw.get("semi_major_axis"),
+        "inclination": orbital_raw.get("inclination"),
+        "ascending_node_longitude": orbital_raw.get("ascending_node_longitude"),
+        "perihelion_argument": orbital_raw.get("perihelion_argument"),
+        "mean_anomaly": orbital_raw.get("mean_anomaly"),
     }
 
 

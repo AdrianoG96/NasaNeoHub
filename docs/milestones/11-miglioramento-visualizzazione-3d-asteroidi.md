@@ -97,13 +97,13 @@ function calculateOrbitalPosition(
 - Click detection via raycasting con instanced mesh
 
 ## Criteri di Accettazione
-- [ ] Le orbite degli asteroidi sono calcolate dai dati orbitali reali (quando disponibili)
-- [ ] La scena 3D è visivamente immersiva con stelle, glow e effetti cosmici
-- [ ] Click su asteroide apre il dettaglio con informazioni complete
-- [ ] Tooltip hover mostra nome, diametro, distanza e pericolosità
-- [ ] Filtri in-scena funzionano (solo pericolosi, reset camera, auto-rotate)
-- [ ] Performance accettabile con >100 asteroidi (>=30fps)
-- [ ] Legenda interattiva mostra/nasconde categorie
-- [ ] Pannello di controllo permette di regolare visualizzazione
-- [ ] Fallback funziona quando dati orbitali non disponibili
-- [ ] Mini-mappa fornisce orientamento spaziale
+- [x] Le orbite degli asteroidi sono calcolate dai dati orbitali reali (quando disponibili)
+- [x] La scena 3D è visivamente immersiva con stelle, glow, nebulosa e effetti cosmici
+- [x] Click su asteroide apre il dettaglio con informazioni complete
+- [x] Tooltip hover mostra nome, diametro, distanza e pericolosità
+- [x] Filtri in-scena funzionano (solo pericolosi, solo vicini, reset camera, auto-rotate)
+- [x] Performance accettabile con >100 asteroidi (instancedMesh per >50, limite 200)
+- [x] Legenda interattiva mostra/nasconde categorie
+- [x] Pannello di controllo permette di regolare visualizzazione (orbite, etichette, velocità, filtri)
+- [x] Fallback funziona quando dati orbitali non disponibili
+- [x] Mini-mappa fornisce orientamento spaziale

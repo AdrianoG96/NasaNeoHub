@@ -39,6 +39,12 @@ class AsteroidSummary(BaseModel):
     relative_velocity_kph: float
     is_potentially_hazardous_asteroid: bool
     nasa_jpl_url: str
+    eccentricity: str | None = None
+    semi_major_axis: str | None = None
+    inclination: str | None = None
+    ascending_node_longitude: str | None = None
+    perihelion_argument: str | None = None
+    mean_anomaly: str | None = None
 
 
 class AsteroidDetail(BaseModel):

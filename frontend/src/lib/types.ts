@@ -8,6 +8,12 @@ export interface AsteroidSummary {
   relative_velocity_kph: number
   is_potentially_hazardous_asteroid: boolean
   nasa_jpl_url: string
+  eccentricity: string | null
+  semi_major_axis: string | null
+  inclination: string | null
+  ascending_node_longitude: string | null
+  perihelion_argument: string | null
+  mean_anomaly: string | null
 }
 
 export interface CloseApproachData {

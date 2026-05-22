@@ -1,13 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { RotateCcw, RotateCw, Orbit, Eye, EyeOff, AlertTriangle } from "lucide-react"
+import { RotateCcw, RotateCw, Orbit, Eye, EyeOff, AlertTriangle, Crosshair } from "lucide-react"
 
 export interface SceneControlState {
   showOrbits: boolean
   showLabels: boolean
   autoRotate: boolean
   hazardousOnly: boolean
+  nearOnly: boolean
   animationSpeed: number
 }
 
@@ -92,6 +93,34 @@ export function SceneControls({
         >
           <AlertTriangle className="size-3.5" />
         </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toggle("nearOnly")}
+          className={`border-white/10 bg-slate-900/80 hover:bg-slate-800 ${
+            controls.nearOnly ? "text-green-400" : "text-white/70 hover:text-white"
+          }`}
+          title="Show only nearby asteroids"
+        >
+          <Crosshair className="size-3.5" />
+        </Button>
+      </div>
+
+      {/* Animation speed slider — below minimap on the left */}
+      <div className="pointer-events-auto absolute left-3 top-[196px] flex flex-col items-center gap-1 rounded-md bg-slate-900/80 px-2 py-1.5 backdrop-blur-sm">
+        <span className="text-[9px] text-white/40">Speed</span>
+        <input
+          type="range"
+          min="0.1"
+          max="3"
+          step="0.1"
+          value={controls.animationSpeed}
+          onChange={(e) => onChange({ ...controls, animationSpeed: parseFloat(e.target.value) })}
+          className="h-16 w-1.5 cursor-pointer appearance-none [&::-webkit-slider-runnable-track]:h-full [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-white/10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-blue-400"
+          style={{ writingMode: "vertical-lr", direction: "rtl" }}
+          title="Animation speed"
+        />
+        <span className="text-[9px] text-white/40">{controls.animationSpeed.toFixed(1)}x</span>
       </div>
 
       {/* Bottom-left info badges */}
