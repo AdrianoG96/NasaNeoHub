@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { ResponsiveContainer, Tooltip } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
 
 interface ActivityHeatmapChartProps {
@@ -27,22 +26,6 @@ function getWeekOfMonth(dateStr: string): number {
   if (day <= 21) return 2
   if (day <= 28) return 3
   return 4
-}
-
-const CustomTooltip = ({ active, payload }: any) => {
-  if (!active || !payload || payload.length === 0) return null
-
-  const data = payload[0].payload as HeatmapCell
-
-  return (
-    <div className="rounded-lg border bg-card p-3 shadow-md">
-      <p className="mb-1 font-semibold">{data.dayLabel} — {WEEK_LABELS[data.weekOfMonth]}</p>
-      <div className="space-y-0.5 text-sm text-muted-foreground">
-        <p>Total asteroids: {data.count}</p>
-        <p className="text-red-400">Hazardous: {data.hazardousCount}</p>
-      </div>
-    </div>
-  )
 }
 
 export function ActivityHeatmapChart({ asteroids }: ActivityHeatmapChartProps) {

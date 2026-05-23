@@ -13,7 +13,7 @@ import { AsteroidDetail } from "@/components/AsteroidDetail"
 import { LoadingState } from "@/components/LoadingState"
 import { useToast } from "@/components/ToastProvider"
 import { fetchAsteroidFeed } from "@/lib/api"
-import { Search, BookOpen, ArrowLeftRight } from "lucide-react"
+import { Search } from "lucide-react"
 import type { AsteroidSummary, HazardousFilterValue, SortField, SortDirection } from "@/lib/types"
 
 export function AsteroidDashboard() {

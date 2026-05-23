@@ -46,12 +46,6 @@ function AnimatedNumber({ value, decimals = 0 }: { value: number; decimals?: num
   return <>{display.toLocaleString("en-US", { maximumFractionDigits: decimals, minimumFractionDigits: decimals })}</>
 }
 
-function formatStat(value: number, unit: string): string {
-  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}M ${unit}`
-  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K ${unit}`
-  return `${value.toFixed(2)} ${unit}`
-}
-
 export function ChartSummaryStats({ asteroids, metric, label, unit }: ChartSummaryStatsProps) {
   const stats = useMemo((): Stats | null => {
     if (asteroids.length === 0) return null
