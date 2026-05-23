@@ -27,7 +27,18 @@ interface BubbleDataPoint {
   bubbleSize: number
 }
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface TooltipProps {
+  active?: boolean
+  payload?: Array<{ payload: BubbleDataPoint }>
+}
+
+interface ShapeProps {
+  cx?: number
+  cy?: number
+  payload?: BubbleDataPoint
+}
+
+const CustomTooltip = ({ active, payload }: TooltipProps) => {
   if (!active || !payload || payload.length === 0) return null
 
   const data = payload[0].payload as BubbleDataPoint
@@ -123,8 +134,9 @@ export function BubbleComparisonChart({ asteroids }: BubbleComparisonChartProps)
             fill="hsl(221, 83%, 53%)"
             fillOpacity={0.6}
             stroke="none"
-            shape={(props: any) => {
+            shape={(props: ShapeProps) => {
               const { cx, cy, payload } = props
+              if (!payload) return null
               return (
                 <circle
                   cx={cx}
@@ -143,8 +155,9 @@ export function BubbleComparisonChart({ asteroids }: BubbleComparisonChartProps)
             fill="hsl(0, 84%, 60%)"
             fillOpacity={0.8}
             stroke="none"
-            shape={(props: any) => {
+            shape={(props: ShapeProps) => {
               const { cx, cy, payload } = props
+              if (!payload) return null
               return (
                 <circle
                   cx={cx}

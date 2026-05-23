@@ -166,15 +166,21 @@ function NebulaBackground() {
     const geo = new THREE.SphereGeometry(45, 32, 32)
     const pos = geo.attributes.position
     const colors = new Float32Array(pos.count * 3)
+    // Seeded pseudo-random for deterministic starfield colors
+    let seed = 42
+    const pseudoRandom = () => {
+      seed = (seed * 16807) % 2147483647
+      return (seed - 1) / 2147483646
+    }
     for (let i = 0; i < pos.count; i++) {
       const x = pos.getX(i)
       const y = pos.getY(i)
       const z = pos.getZ(i)
       const dist = Math.sqrt(x * x + y * y + z * z) / 45
       // Cosmic gradient: deep purple-blue with hints of magenta
-      colors[i * 3] = 0.05 + Math.random() * 0.08 + dist * 0.1
-      colors[i * 3 + 1] = 0.01 + Math.random() * 0.04 + dist * 0.05
-      colors[i * 3 + 2] = 0.08 + Math.random() * 0.1 + dist * 0.15
+      colors[i * 3] = 0.05 + pseudoRandom() * 0.08 + dist * 0.1
+      colors[i * 3 + 1] = 0.01 + pseudoRandom() * 0.04 + dist * 0.05
+      colors[i * 3 + 2] = 0.08 + pseudoRandom() * 0.1 + dist * 0.15
     }
     geo.setAttribute("color", new THREE.BufferAttribute(colors, 3))
     return geo
@@ -210,7 +216,7 @@ function InstancedAsteroids({
   const count = asteroidData.length
 
   // Colors per instance
-  const _colors = useMemo(() => {
+  const colors = useMemo(() => {
     const cols = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const isHazardous = asteroidData[i].asteroid.is_potentially_hazardous_asteroid
@@ -231,6 +237,13 @@ function InstancedAsteroids({
     }
     return cols
   }, [asteroidData, selectedIds, count])
+
+  // Apply instance colors on mount
+  useEffect(() => {
+    if (!meshRef.current) return
+    const colorAttr = new THREE.InstancedBufferAttribute(colors, 3)
+    meshRef.current.instanceColor = colorAttr
+  }, [colors])
 
   // Update instance matrices
   useFrame((state) => {
