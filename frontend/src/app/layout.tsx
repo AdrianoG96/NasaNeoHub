@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Inter, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/ThemeProvider"
 import { CosmicBackground } from "@/components/CosmicBackground"
 import { ToastProvider } from "@/components/ToastProvider"
 
@@ -31,16 +30,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${jetbrainsMono.variable} dark h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider>
-          <CosmicBackground />
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </ThemeProvider>
+        <CosmicBackground />
+        <ToastProvider>
+          {children}
+        </ToastProvider>
       </body>
     </html>
   )

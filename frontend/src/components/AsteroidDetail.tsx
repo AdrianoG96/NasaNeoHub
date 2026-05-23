@@ -284,7 +284,7 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
                   className={
                     detail.is_potentially_hazardous_asteroid
                       ? "shrink-0"
-                      : "shrink-0 border-green-500 text-green-600 dark:text-green-400"
+                      : "shrink-0 border-green-500 text-green-400"
                   }
                 >
                   {detail.is_potentially_hazardous_asteroid ? (

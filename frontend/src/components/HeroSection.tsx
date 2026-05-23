@@ -1,9 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Moon, Sparkles, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useTheme } from "@/components/ThemeProvider"
+import { Sparkles, Moon } from "lucide-react"
 
 const COSMIC_FACTS = [
   "Did you know? The closest asteroid to Earth in the last year was just 2,900 km away!",
@@ -19,7 +17,6 @@ const COSMIC_FACTS = [
 ]
 
 export function HeroSection() {
-  const { theme, toggleTheme } = useTheme()
   const [fact, setFact] = useState(COSMIC_FACTS[0])
   const [time, setTime] = useState(new Date())
   const [mounted, setMounted] = useState(false)
@@ -54,7 +51,7 @@ export function HeroSection() {
       <div className="pointer-events-none absolute -bottom-20 -left-20 size-64 rounded-full bg-purple-500/10 blur-3xl" />
 
       <div className="relative flex flex-col gap-6">
-        {/* Top row: title + theme toggle */}
+        {/* Top row: title */}
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
@@ -67,15 +64,6 @@ export function HeroSection() {
               Real-time NASA data on asteroids approaching Earth — explore, learn, discover.
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={toggleTheme}
-            className="shrink-0 border-white/10 bg-white/5 text-white/70 hover:bg-white/10 hover:text-white transition-all duration-200 hover:scale-105"
-            aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-          >
-            {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-          </Button>
         </div>
 
         {/* Bottom row: clock + fact */}

@@ -100,6 +100,25 @@ function Sun() {
 
 function Earth({ animationSpeed = 1 }: { animationSpeed?: number }) {
   const earthRef = useRef<THREE.Mesh>(null)
+  const textureLoader = useMemo(() => new THREE.TextureLoader(), [])
+
+  // Load Earth texture from a reliable CDN
+  const [earthMap, setEarthMap] = useState<THREE.Texture | null>(null)
+
+  useEffect(() => {
+    textureLoader.load(
+      "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
+      (texture) => setEarthMap(texture),
+      undefined,
+      () => {
+        // Fallback: try another source
+        textureLoader.load(
+          "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",
+          (texture) => setEarthMap(texture),
+        )
+      }
+    )
+  }, [textureLoader])
 
   useFrame((state) => {
     if (earthRef.current) {
@@ -115,8 +134,9 @@ function Earth({ animationSpeed = 1 }: { animationSpeed?: number }) {
       <mesh ref={earthRef} position={[4, 0, 0]}>
         <sphereGeometry args={[0.3, 32, 32]} />
         <meshStandardMaterial
-          color="#3b82f6"
-          emissive="#1d4ed8"
+          map={earthMap}
+          color={earthMap ? "#ffffff" : "#3b82f6"}
+          emissive={earthMap ? "#000000" : "#1d4ed8"}
           emissiveIntensity={0.3}
           roughness={0.5}
           metalness={0.1}
@@ -204,9 +224,9 @@ function InstancedAsteroids({
         cols[i * 3 + 1] = 0.27
         cols[i * 3 + 2] = 0.2
       } else {
-        cols[i * 3] = 0.38
-        cols[i * 3 + 1] = 0.65
-        cols[i * 3 + 2] = 0.98
+        cols[i * 3] = 0.2
+        cols[i * 3 + 1] = 0.8
+        cols[i * 3 + 2] = 0.5
       }
     }
     return cols
@@ -335,12 +355,12 @@ function AsteroidPoint({
     ? "#facc15"
     : asteroid.is_potentially_hazardous_asteroid
       ? "#ef4444"
-      : "#60a5fa"
+      : "#34d399"
   const emissiveColor = isSelected
     ? "#facc15"
     : asteroid.is_potentially_hazardous_asteroid
       ? "#ef4444"
-      : "#3b82f6"
+      : "#10b981"
 
   useFrame((state) => {
     if (meshRef.current) {
@@ -480,7 +500,7 @@ function Minimap({ asteroidData }: { asteroidData: AsteroidData[] }) {
         ctx.arc(x, y, 1.5, 0, Math.PI * 2)
         ctx.fillStyle = data.asteroid.is_potentially_hazardous_asteroid
           ? "rgba(239, 68, 68, 0.6)"
-          : "rgba(96, 165, 250, 0.6)"
+          : "rgba(52, 211, 153, 0.6)"
         ctx.fill()
       }
 
@@ -607,7 +627,7 @@ function Scene({ asteroids, onAsteroidClick, controls, orbitControlsRef }: Scene
             <OrbitLine3D
               key={`orbit-${data.asteroid.id}`}
               orbitalParams={data.orbitalParams}
-              color={data.asteroid.is_potentially_hazardous_asteroid ? "#ef4444" : "#3b82f6"}
+              color={data.asteroid.is_potentially_hazardous_asteroid ? "#ef4444" : "#34d399"}
               opacity={selectedIds.has(data.asteroid.id) ? 0.6 : 0.2}
               visible
             />

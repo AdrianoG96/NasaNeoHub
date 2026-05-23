@@ -145,7 +145,7 @@ export function SceneControls({
           Hazardous
         </span>
         <span className="flex items-center gap-1.5 text-white/60">
-          <span className="inline-block size-2.5 rounded-full bg-blue-400" />
+          <span className="inline-block size-2.5 rounded-full bg-emerald-400" />
           Non-Hazardous
         </span>
         <span className="flex items-center gap-1.5 text-white/60">
