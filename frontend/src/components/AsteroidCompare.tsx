@@ -77,19 +77,19 @@ export function AsteroidCompare({ asteroids }: AsteroidCompareProps) {
         Compare
       </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-h-[90dvh] max-w-3xl overflow-y-auto border-white/10 bg-slate-900 text-white">
+        <DialogContent className="max-h-[85dvh] max-w-3xl overflow-y-auto border-white/10 bg-slate-900 p-3 text-white sm:p-6">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl">
+            <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <ArrowLeftRight className="size-5 text-blue-400" />
               Asteroid Comparison
             </DialogTitle>
-            <DialogDescription className="text-blue-200/60">
+            <DialogDescription className="text-blue-200/60 text-xs sm:text-sm">
               Select two asteroids to compare their characteristics side by side.
             </DialogDescription>
           </DialogHeader>
 
           {/* Selection */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
             <div>
               <label className="mb-1.5 block text-xs font-medium text-blue-300/70">Asteroid A</label>
               <select

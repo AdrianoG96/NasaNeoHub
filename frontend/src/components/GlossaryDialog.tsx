@@ -73,26 +73,26 @@ export function GlossaryDialog() {
         Learn
       </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-h-[90dvh] max-w-2xl overflow-y-auto border-white/10 bg-slate-900 text-white">
+        <DialogContent className="max-h-[85dvh] max-w-2xl overflow-y-auto border-white/10 bg-slate-900 p-3 text-white sm:p-6">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl">
+            <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <BookOpen className="size-5 text-blue-400" />
               Astronomy Glossary
             </DialogTitle>
-            <DialogDescription className="text-blue-200/60">
+            <DialogDescription className="text-blue-200/60 text-xs sm:text-sm">
               Learn the terminology used by NASA astronomers to describe near-Earth objects.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {GLOSSARY_TERMS.map((item) => (
               <div
                 key={item.term}
-                className="rounded-lg border border-white/10 bg-white/5 p-4 transition-colors hover:border-white/20"
+                className="rounded-lg border border-white/10 bg-white/5 p-3 transition-colors hover:border-white/20 sm:p-4"
               >
-                <h3 className="mb-1 font-semibold text-blue-300">{item.term}</h3>
-                <p className="text-sm leading-relaxed text-white/70">{item.definition}</p>
+                <h3 className="mb-1 text-sm font-semibold text-blue-300 sm:text-base">{item.term}</h3>
+                <p className="text-xs leading-relaxed text-white/70 sm:text-sm">{item.definition}</p>
                 {item.comparison && (
-                  <p className="mt-1.5 text-xs font-medium text-yellow-300/80">{item.comparison}</p>
+                  <p className="mt-1.5 text-[11px] font-medium text-yellow-300/80 sm:text-xs">{item.comparison}</p>
                 )}
                 {item.learnMore && (
                   <a

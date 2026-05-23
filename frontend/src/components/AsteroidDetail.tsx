@@ -122,9 +122,14 @@ function AsteroidIllustration({
           </filter>
         </defs>
         <circle cx="50" cy="50" r="45" fill={`url(#asteroid-grad-${isHazardous ? "haz" : "safe"})`} filter={`url(#asteroid-shadow-${isHazardous ? "haz" : "safe"})`} />
-        {craters.map((crater, i) => (
-          <ellipse key={i} cx={crater.cx} cy={crater.cy} rx={crater.r} ry={crater.r} fill={darkColor} opacity="0.4" transform={`rotate(${i * 37}, ${crater.cx}, ${crater.cy})`} />
-        ))}
+        {craters.map((crater, i) => {
+          // Convert percentage strings to absolute numbers based on viewBox 100x100
+          const cxNum = Number.parseFloat(crater.cx)
+          const cyNum = Number.parseFloat(crater.cy)
+          return (
+            <ellipse key={i} cx={crater.cx} cy={crater.cy} rx={crater.r} ry={crater.r} fill={darkColor} opacity="0.4" transform={`rotate(${i * 37}, ${cxNum}, ${cyNum})`} />
+          )
+        })}
         <ellipse cx="35" cy="30" rx="15" ry="10" fill="white" opacity="0.08" transform="rotate(-30, 35, 30)" />
       </svg>
       <span className="text-xs font-mono text-muted-foreground">Ø {formatDecimal(avgDiameter, 3)} km</span>
@@ -224,7 +229,7 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
 
   return (
     <Dialog open={!!asteroidId} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-h-[90dvh] w-full max-w-2xl overflow-y-auto border-white/10 bg-slate-900 p-4 text-white sm:max-w-3xl sm:p-6">
+      <DialogContent className="max-h-[85dvh] w-full max-w-2xl overflow-x-hidden overflow-y-auto border-white/10 bg-slate-900 p-3 text-white sm:max-w-3xl sm:p-6 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/20">
         {state.status === "loading" && <DetailSkeleton />}
 
         {state.status === "error" && (
@@ -245,17 +250,17 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
           const detail = state.detail
           return (
             <>
-              <DialogHeader>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="space-y-1">
-                    <DialogTitle className="text-2xl font-bold">{detail.name}</DialogTitle>
-                    <DialogDescription className="text-xs font-mono text-muted-foreground">ID: {detail.id}</DialogDescription>
+              <DialogHeader className="pr-8 sm:pr-0">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0 space-y-1">
+                    <DialogTitle className="text-lg font-bold leading-tight sm:text-2xl">{detail.name}</DialogTitle>
+                    <DialogDescription className="truncate text-xs font-mono text-muted-foreground">ID: {detail.id}</DialogDescription>
                   </div>
-                  <Badge variant={detail.is_potentially_hazardous_asteroid ? "destructive" : "outline"} className={detail.is_potentially_hazardous_asteroid ? "shrink-0" : "shrink-0 border-green-500 text-green-400"}>
+                  <Badge variant={detail.is_potentially_hazardous_asteroid ? "destructive" : "outline"} className={detail.is_potentially_hazardous_asteroid ? "shrink-0 text-[10px] sm:text-xs" : "shrink-0 border-green-500 text-green-400 text-[10px] sm:text-xs"}>
                     {detail.is_potentially_hazardous_asteroid ? (
-                      <span className="flex items-center gap-1"><AlertTriangle className="size-3" />Potentially Hazardous</span>
+                      <span className="flex items-center gap-1"><AlertTriangle className="size-3" /><span className="hidden sm:inline">Potentially Hazardous</span><span className="sm:hidden">Hazardous</span></span>
                     ) : (
-                      <span className="flex items-center gap-1"><Info className="size-3" />Not Hazardous</span>
+                      <span className="flex items-center gap-1"><Info className="size-3" /><span className="hidden sm:inline">Not Hazardous</span><span className="sm:hidden">Safe</span></span>
                     )}
                   </Badge>
                 </div>
@@ -271,6 +276,7 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
               </div>
 
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {/* On mobile, first two cards span full width, last two stack below */}
                 <StatCard icon={<Ruler className="size-3.5" />} label="Diameter Range" value={`${formatDecimal(detail.estimated_diameter_min_km, 3)} km`} subValue={`${formatDecimal(detail.estimated_diameter_min_m, 0)} – ${formatDecimal(detail.estimated_diameter_max_m, 0)} m`} />
                 <StatCard icon={<Gauge className="size-3.5" />} label="Relative Velocity" value={formatVelocity(detail.close_approach_data[0]?.relative_velocity_kph ?? 0)} subValue={detail.close_approach_data[0] ? `${formatDecimal(detail.close_approach_data[0].relative_velocity_kph / 3600, 2)} km/s` : undefined} />
                 <StatCard icon={<ArrowLeftRight className="size-3.5" />} label="Miss Distance" value={formatDistance(detail.close_approach_data[0]?.miss_distance_km ?? 0)} subValue={detail.close_approach_data[0] ? `${formatDecimal(detail.close_approach_data[0].miss_distance_km / 384400, 2)} lunar distances` : undefined} />
@@ -290,19 +296,19 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Miss Distance (km)</TableHead>
-                          <TableHead>Relative Velocity (km/h)</TableHead>
-                          <TableHead>Orbiting Body</TableHead>
+                          <TableHead className="whitespace-nowrap sm:whitespace-normal">Date</TableHead>
+                          <TableHead className="whitespace-nowrap sm:whitespace-normal">Miss Distance</TableHead>
+                          <TableHead className="hidden whitespace-nowrap sm:table-cell sm:whitespace-normal">Relative Velocity</TableHead>
+                          <TableHead className="hidden whitespace-nowrap sm:table-cell sm:whitespace-normal">Orbiting Body</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {displayedApproaches.map((approach) => (
                           <TableRow key={approach.close_approach_date}>
-                            <TableCell className="font-medium">{formatDate(approach.close_approach_date)}</TableCell>
-                            <TableCell>{formatDistance(approach.miss_distance_km)}</TableCell>
-                            <TableCell>{formatVelocity(approach.relative_velocity_kph)}</TableCell>
-                            <TableCell>Earth</TableCell>
+                            <TableCell className="whitespace-nowrap font-medium sm:whitespace-normal">{formatDate(approach.close_approach_date)}</TableCell>
+                            <TableCell className="whitespace-nowrap sm:whitespace-normal">{formatDistance(approach.miss_distance_km)}</TableCell>
+                            <TableCell className="hidden whitespace-nowrap sm:table-cell sm:whitespace-normal">{formatVelocity(approach.relative_velocity_kph)}</TableCell>
+                            <TableCell className="hidden whitespace-nowrap sm:table-cell sm:whitespace-normal">Earth</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -323,7 +329,7 @@ export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
                   Orbital Data
                 </h3>
                 {detail.orbital_data ? (
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-lg border p-4 sm:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-x-6 gap-y-2 rounded-lg border p-3 sm:grid-cols-2 sm:p-4 md:grid-cols-3">
                     <OrbitalField label="Orbit ID" value={detail.orbital_data.orbit_id} />
                     <OrbitalField label="Orbit Determination Date" value={detail.orbital_data.orbit_determination_date} />
                     <OrbitalField label="Eccentricity" value={detail.orbital_data.eccentricity} />
