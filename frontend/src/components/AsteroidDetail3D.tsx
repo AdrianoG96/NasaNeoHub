@@ -23,13 +23,19 @@ export function AsteroidDetail3D({ detail }: AsteroidDetail3DProps) {
     const geo = new THREE.IcosahedronGeometry(size, 2)
     const positions = geo.attributes.position
 
+    // Seeded pseudo-random based on vertex index for deterministic noise
+    const seededRandom = (seed: number) => {
+      const s = seed * 9301 + 49297
+      return ((s % 233280) / 233280)
+    }
+
     for (let i = 0; i < positions.count; i++) {
       const x = positions.getX(i)
       const y = positions.getY(i)
       const z = positions.getZ(i)
 
       const length = Math.sqrt(x * x + y * y + z * z)
-      const noise = 0.7 + Math.random() * 0.6
+      const noise = 0.7 + seededRandom(i) * 0.6
       const newLength = length * noise
 
       positions.setXYZ(i, (x / length) * newLength, (y / length) * newLength, (z / length) * newLength)

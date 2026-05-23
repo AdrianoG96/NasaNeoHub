@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useReducer } from "react"
+import { useState, useEffect, useReducer, useRef } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -196,12 +196,18 @@ function StatCard({ icon, label, value, subValue }: { icon: React.ReactNode; lab
 export function AsteroidDetail({ asteroidId, onClose }: AsteroidDetailProps) {
   const [state, dispatch] = useReducer(detailReducer, { status: "idle" })
   const [showAllApproaches, setShowAllApproaches] = useState(false)
+  const prevAsteroidIdRef = useRef(asteroidId)
 
   useEffect(() => {
     if (!asteroidId) return
 
+    // Reset showAllApproaches when asteroidId changes
+    if (prevAsteroidIdRef.current !== asteroidId) {
+      prevAsteroidIdRef.current = asteroidId
+      setShowAllApproaches(false)
+    }
+
     dispatch({ type: "FETCH_START" })
-    setShowAllApproaches(false)
 
     fetchAsteroidDetail(asteroidId)
       .then((data) => dispatch({ type: "FETCH_SUCCESS", detail: data }))

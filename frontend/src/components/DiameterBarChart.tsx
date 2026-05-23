@@ -43,7 +43,13 @@ const BAR_COLORS = [
   "hsl(221, 83%, 81%)",
 ]
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface TooltipProps {
+  active?: boolean
+  payload?: Array<{ payload: BinData }>
+  label?: string
+}
+
+const CustomTooltip = ({ active, payload }: TooltipProps) => {
   if (!active || !payload || payload.length === 0) return null
 
   const data = payload[0].payload as BinData
