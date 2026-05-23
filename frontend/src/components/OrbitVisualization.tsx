@@ -210,7 +210,7 @@ function InstancedAsteroids({
   const count = asteroidData.length
 
   // Colors per instance
-  const colors = useMemo(() => {
+  const _colors = useMemo(() => {
     const cols = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const isHazardous = asteroidData[i].asteroid.is_potentially_hazardous_asteroid
@@ -230,7 +230,7 @@ function InstancedAsteroids({
       }
     }
     return cols
-  }, [asteroidData, selectedIds])
+  }, [asteroidData, selectedIds, count])
 
   // Update instance matrices
   useFrame((state) => {

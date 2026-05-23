@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useReducer } from "react"
 import { Award, Search, AlertTriangle, Orbit, Star, Telescope } from "lucide-react"
 import { useToast } from "@/components/ToastProvider"
 import type { AsteroidSummary } from "@/lib/types"
@@ -62,19 +62,38 @@ interface DiscoveryBadgesProps {
   asteroids: AsteroidSummary[]
 }
 
-export function DiscoveryBadges({ asteroids }: DiscoveryBadgesProps) {
-  const [earnedBadges, setEarnedBadges] = useState<Set<string>>(new Set())
-  const [totalSearches, setTotalSearches] = useState(0)
-  const { addToast } = useToast()
+function loadEarnedBadges(): Set<string> {
+  const saved = localStorage.getItem("neo-badges")
+  if (saved) {
+    return new Set(JSON.parse(saved))
+  }
+  return new Set()
+}
 
-  useEffect(() => {
-    const saved = localStorage.getItem("neo-badges")
-    if (saved) {
-      setEarnedBadges(new Set(JSON.parse(saved)))
+function loadTotalSearches(): number {
+  return Number.parseInt(localStorage.getItem("neo-searches") || "0", 10)
+}
+
+type BadgesAction =
+  | { type: "ADD_BADGES"; ids: string[] }
+
+function badgesReducer(state: Set<string>, action: BadgesAction): Set<string> {
+  switch (action.type) {
+    case "ADD_BADGES": {
+      const next = new Set(state)
+      for (const id of action.ids) {
+        next.add(id)
+      }
+      return next
     }
-    const searches = Number.parseInt(localStorage.getItem("neo-searches") || "0", 10)
-    setTotalSearches(searches)
-  }, [])
+  }
+}
+
+export function DiscoveryBadges({ asteroids }: DiscoveryBadgesProps) {
+  const [earnedBadges, dispatch] = useReducer(badgesReducer, null, loadEarnedBadges)
+  const [totalSearches] = useState(loadTotalSearches)
+  const { addToast } = useToast()
+  const notifiedRef = useRef<Set<string>>(new Set())
 
   useEffect(() => {
     if (asteroids.length === 0) return
@@ -88,20 +107,26 @@ export function DiscoveryBadges({ asteroids }: DiscoveryBadgesProps) {
     }
 
     if (newlyEarned.length > 0) {
+      dispatch({ type: "ADD_BADGES", ids: newlyEarned })
       const updated = new Set(earnedBadges)
       for (const id of newlyEarned) {
         updated.add(id)
       }
-      setEarnedBadges(updated)
       localStorage.setItem("neo-badges", JSON.stringify([...updated]))
 
-      const badge = BADGES.find((b) => b.id === newlyEarned[0])
-      if (badge) {
-        addToast({
-          type: "success",
-          title: `🏆 New Badge Unlocked!`,
-          message: badge.name,
-        })
+      // Show toast only once per badge using a ref
+      for (const id of newlyEarned) {
+        if (!notifiedRef.current.has(id)) {
+          notifiedRef.current.add(id)
+          const badge = BADGES.find((b) => b.id === id)
+          if (badge) {
+            addToast({
+              type: "success",
+              title: `🏆 New Badge Unlocked!`,
+              message: badge.name,
+            })
+          }
+        }
       }
     }
   }, [asteroids, earnedBadges, totalSearches, addToast])

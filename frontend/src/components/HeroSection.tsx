@@ -16,17 +16,23 @@ const COSMIC_FACTS = [
   "Did you know? Asteroids can tell us about the early Solar System — they're time capsules!",
 ]
 
-export function HeroSection() {
-  const [fact, setFact] = useState<string | null>(null)
-  const [time, setTime] = useState(new Date())
+function getDailyFactIndex(): number {
+  const today = new Date()
+  return today.getDate() % COSMIC_FACTS.length
+}
 
-  useEffect(() => {
-    setFact(COSMIC_FACTS[Math.floor(Math.random() * COSMIC_FACTS.length)])
-  }, [])
+export function HeroSection() {
+  const [fact, setFact] = useState(() => COSMIC_FACTS[getDailyFactIndex()])
+  const [time, setTime] = useState(new Date())
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const randomIndex = Math.floor(Math.random() * COSMIC_FACTS.length)
+    setFact(COSMIC_FACTS[randomIndex])
   }, [])
 
   const formatTime = (date: Date) =>
