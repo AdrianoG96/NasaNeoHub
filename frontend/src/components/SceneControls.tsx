@@ -137,33 +137,6 @@ export function SceneControls({
           1 unit ≈ 0.25 AU
         </div>
       </div>
-
-      {/* Bottom-right legend */}
-      <div className="pointer-events-auto absolute bottom-3 right-3 flex flex-col gap-1.5 rounded-md bg-slate-900/80 px-3 py-2 text-xs backdrop-blur-sm">
-        <span className="flex items-center gap-1.5 text-white/60">
-          <span className="inline-block size-2.5 rounded-full bg-red-500" />
-          Hazardous
-        </span>
-        <span className="flex items-center gap-1.5 text-white/60">
-          <span className="inline-block size-2.5 rounded-full bg-emerald-400" />
-          Non-Hazardous
-        </span>
-        <span className="flex items-center gap-1.5 text-white/60">
-          <span className="inline-block size-2.5 rounded-full bg-amber-400" />
-          Sun
-        </span>
-        <span className="flex items-center gap-1.5 text-white/60">
-          <span className="inline-block size-2.5 rounded-full bg-blue-600" />
-          Earth
-        </span>
-      </div>
-
-      {/* Bottom-center interaction hint */}
-      <div className="pointer-events-auto absolute bottom-3 left-1/2 -translate-x-1/2">
-        <div className="rounded-full bg-slate-900/60 px-3 py-1 text-[10px] text-white/30 backdrop-blur-sm">
-          Drag to rotate · Scroll to zoom · Click asteroid for details
-        </div>
-      </div>
     </div>
   )
 }

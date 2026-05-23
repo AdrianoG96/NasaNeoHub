@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { AlertTriangle, X } from "lucide-react"
@@ -14,24 +14,17 @@ interface HazardAlertProps {
 }
 
 export function HazardAlert({ hazardousCount, totalCount, onSetFilter, onDismiss }: HazardAlertProps) {
-  const [isVisible, setIsVisible] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
+  const isVisible = !dismissed && hazardousCount > 0
 
-  useEffect(() => {
-    if (hazardousCount > 0) {
-      setIsVisible(true)
-    } else {
-      setIsVisible(false)
-    }
-  }, [hazardousCount])
-
-  if (!isVisible || hazardousCount === 0) return null
+  if (!isVisible) return null
 
   const handleShowHazardous = () => {
     onSetFilter("hazardous")
   }
 
   const handleDismiss = () => {
-    setIsVisible(false)
+    setDismissed(true)
     onDismiss()
   }
 

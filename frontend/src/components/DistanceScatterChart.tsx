@@ -13,6 +13,7 @@ import {
   Brush,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface DistanceScatterChartProps {
   asteroids: AsteroidSummary[]
@@ -49,6 +50,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function DistanceScatterChart({ asteroids }: DistanceScatterChartProps) {
+  const isMobile = useMobile()
+
   const chartData = useMemo(() => {
     return asteroids.map((a) => ({
       date: a.close_approach_date,
@@ -71,8 +74,8 @@ export function DistanceScatterChart({ asteroids }: DistanceScatterChartProps) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+    <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+      <ScatterChart margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
         <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
         <XAxis
           dataKey="dateTimestamp"
@@ -83,31 +86,33 @@ export function DistanceScatterChart({ asteroids }: DistanceScatterChartProps) {
           }}
           type="number"
           domain={["dataMin", "dataMax"]}
-          tick={{ fontSize: 12 }}
-          label={{ value: "Close Approach Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
+          {...(isMobile ? {} : { label: { value: "Close Approach Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
         />
         <YAxis
           dataKey="miss_distance_km"
           name="Distance (km)"
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
           tickFormatter={(v: number) => v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v / 1_000).toFixed(0)}K` : v.toLocaleString("en-US")}
-          label={{ value: "Miss Distance (km)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } }}
+          {...(isMobile ? {} : { label: { value: "Miss Distance (km)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } } })}
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend
           formatter={(value: string) => (
-            <span className="text-sm">{value === "Hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
+            <span className={isMobile ? "text-[10px]" : "text-sm"}>{value === "Hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
           )}
         />
-        <Brush
-          dataKey="dateTimestamp"
-          height={30}
-          stroke="hsl(var(--primary))"
-          tickFormatter={(ts: number) => {
-            const d = new Date(ts)
-            return `${d.getMonth() + 1}/${d.getDate()}`
-          }}
-        />
+        {!isMobile && (
+          <Brush
+            dataKey="dateTimestamp"
+            height={30}
+            stroke="hsl(var(--primary))"
+            tickFormatter={(ts: number) => {
+              const d = new Date(ts)
+              return `${d.getMonth() + 1}/${d.getDate()}`
+            }}
+          />
+        )}
         <Scatter
           name="Non-Hazardous"
           data={nonHazardousData}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef } from "react"
+import { useRef, useState } from "react"
 import { useFrame } from "@react-three/fiber"
 import * as THREE from "three"
 
@@ -16,7 +16,7 @@ interface StarFieldProps {
 export function StarField({ count = 2000, depth = 100 }: StarFieldProps) {
   const pointsRef = useRef<THREE.Points>(null)
 
-  const [positions, colors, sizes] = useMemo(() => {
+  const [geometry] = useState(() => {
     const pos = new Float32Array(count * 3)
     const col = new Float32Array(count * 3)
     const siz = new Float32Array(count)
@@ -52,8 +52,12 @@ export function StarField({ count = 2000, depth = 100 }: StarFieldProps) {
       siz[i] = 0.5 + Math.random() * 1.5
     }
 
-    return [pos, col, siz]
-  }, [count, depth])
+    const geo = new THREE.BufferGeometry()
+    geo.setAttribute("position", new THREE.BufferAttribute(pos, 3))
+    geo.setAttribute("color", new THREE.BufferAttribute(col, 3))
+    geo.setAttribute("size", new THREE.BufferAttribute(siz, 1))
+    return geo
+  })
 
   useFrame((state) => {
     if (pointsRef.current) {
@@ -64,30 +68,7 @@ export function StarField({ count = 2000, depth = 100 }: StarFieldProps) {
   })
 
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          args={[positions, 3]}
-          attach="attributes-position"
-          count={count}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          args={[colors, 3]}
-          attach="attributes-color"
-          count={count}
-          array={colors}
-          itemSize={3}
-        />
-        <bufferAttribute
-          args={[sizes, 1]}
-          attach="attributes-size"
-          count={count}
-          array={sizes}
-          itemSize={1}
-        />
-      </bufferGeometry>
+    <points ref={pointsRef} geometry={geometry}>
       <pointsMaterial
         size={0.15}
         vertexColors

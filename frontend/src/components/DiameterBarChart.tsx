@@ -13,6 +13,7 @@ import {
   Cell,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface DiameterBarChartProps {
   asteroids: AsteroidSummary[]
@@ -59,6 +60,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function DiameterBarChart({ asteroids }: DiameterBarChartProps) {
+  const isMobile = useMobile()
+
   const chartData = useMemo(() => {
     const total = asteroids.length
 
@@ -87,22 +90,22 @@ export function DiameterBarChart({ asteroids }: DiameterBarChartProps) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <BarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+    <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+      <BarChart data={chartData} margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
         <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
         <XAxis
           dataKey="binLabel"
-          tick={{ fontSize: 12 }}
-          label={{ value: "Diameter Range", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
+          {...(isMobile ? {} : { label: { value: "Diameter Range", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
         />
         <YAxis
-          tick={{ fontSize: 12 }}
-          label={{ value: "Count", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } }}
+          tick={{ fontSize: isMobile ? 10 : 12 }}
+          {...(isMobile ? {} : { label: { value: "Count", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } } })}
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend
           formatter={() => (
-            <span className="text-sm">Asteroid Count</span>
+            <span className={isMobile ? "text-[10px]" : "text-sm"}>Asteroid Count</span>
           )}
         />
         <Bar dataKey="count" name="Asteroid Count" radius={[4, 4, 0, 0]}>

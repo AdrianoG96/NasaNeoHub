@@ -13,6 +13,7 @@ import {
   Area,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface VelocityLineChartProps {
   asteroids: AsteroidSummary[]
@@ -60,6 +61,7 @@ function computeRollingAverage(data: VelocityDataPoint[], windowSize: number): (
 }
 
 export function VelocityLineChart({ asteroids }: VelocityLineChartProps) {
+  const isMobile = useMobile()
   const [showMovingAverage, setShowMovingAverage] = useState(false)
 
   const chartData = useMemo(() => {
@@ -107,8 +109,8 @@ export function VelocityLineChart({ asteroids }: VelocityLineChartProps) {
           {showMovingAverage ? "Hide" : "Show"} Moving Average (3)
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={dataWithMA} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+        <LineChart data={dataWithMA} margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis
             dataKey="dateTimestamp"
@@ -119,20 +121,20 @@ export function VelocityLineChart({ asteroids }: VelocityLineChartProps) {
             }}
             type="number"
             domain={["dataMin", "dataMax"]}
-            tick={{ fontSize: 12 }}
-            label={{ value: "Close Approach Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            {...(isMobile ? {} : { label: { value: "Close Approach Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
           />
           <YAxis
             dataKey="relative_velocity_kph"
             name="Velocity (km/h)"
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
             tickFormatter={(v: number) => v >= 1_000 ? `${(v / 1_000).toFixed(0)}K` : v.toLocaleString("en-US")}
-            label={{ value: "Relative Velocity (km/h)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } }}
+            {...(isMobile ? {} : { label: { value: "Relative Velocity (km/h)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } } })}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value: string) => (
-              <span className="text-sm">{value === "Velocity" ? "Relative Velocity" : value}</span>
+              <span className={isMobile ? "text-[10px]" : "text-sm"}>{value === "Velocity" ? "Relative Velocity" : value}</span>
             )}
           />
           <defs>

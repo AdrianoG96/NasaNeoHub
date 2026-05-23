@@ -13,6 +13,7 @@ import {
   Legend,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface DailyDiscoveryChartProps {
   asteroids: AsteroidSummary[]
@@ -56,6 +57,7 @@ function computeRollingAverage(values: number[], windowSize: number): (number | 
 }
 
 export function DailyDiscoveryChart({ asteroids }: DailyDiscoveryChartProps) {
+  const isMobile = useMobile()
   const [showTrend, setShowTrend] = useState(false)
 
   const chartData = useMemo(() => {
@@ -124,8 +126,8 @@ export function DailyDiscoveryChart({ asteroids }: DailyDiscoveryChartProps) {
           {showTrend ? "Hide" : "Show"} Trend (3-day MA)
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={dataWithTrend} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+        <BarChart data={dataWithTrend} margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis
             dataKey="dateTimestamp"
@@ -136,17 +138,17 @@ export function DailyDiscoveryChart({ asteroids }: DailyDiscoveryChartProps) {
             }}
             type="number"
             domain={["dataMin", "dataMax"]}
-            tick={{ fontSize: 12 }}
-            label={{ value: "Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            {...(isMobile ? {} : { label: { value: "Date", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
           />
           <YAxis
-            tick={{ fontSize: 12 }}
-            label={{ value: "Count", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            {...(isMobile ? {} : { label: { value: "Count", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } } })}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value: string) => (
-              <span className="text-sm">
+              <span className={isMobile ? "text-[10px]" : "text-sm"}>
                 {value === "nonHazardous" ? "Non-Hazardous" : value === "hazardous" ? "Hazardous" : value === "trendLine" ? "Trend (3-day MA)" : value}
               </span>
             )}

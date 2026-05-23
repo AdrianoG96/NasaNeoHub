@@ -24,10 +24,7 @@ function AnimatedStatValue({ value, suffix = "" }: { value: string; suffix?: str
   const isNumeric = !Number.isNaN(numericValue)
 
   useEffect(() => {
-    if (!isNumeric || numericValue === 0) {
-      setDisplay(0)
-      return
-    }
+    if (!isNumeric || numericValue === 0) return
     const duration = 800
     const steps = 20
     const increment = numericValue / steps

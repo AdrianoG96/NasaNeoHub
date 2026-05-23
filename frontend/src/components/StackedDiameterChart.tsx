@@ -12,6 +12,7 @@ import {
   Legend,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface StackedDiameterChartProps {
   asteroids: AsteroidSummary[]
@@ -54,6 +55,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function StackedDiameterChart({ asteroids }: StackedDiameterChartProps) {
+  const isMobile = useMobile()
   const [showPercentage, setShowPercentage] = useState(false)
 
   const chartData = useMemo(() => {
@@ -101,28 +103,30 @@ export function StackedDiameterChart({ asteroids }: StackedDiameterChartProps) {
           {showPercentage ? "Count" : "Percentage"}
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <BarChart data={chartData} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+        <BarChart data={chartData} margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis
             dataKey="binLabel"
-            tick={{ fontSize: 12 }}
-            label={{ value: "Diameter Range", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            {...(isMobile ? {} : { label: { value: "Diameter Range", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
           />
           <YAxis
-            tick={{ fontSize: 12 }}
-            label={{
-              value: showPercentage ? "Percentage (%)" : "Count",
-              angle: -90,
-              position: "insideLeft",
-              offset: 10,
-              style: { fontSize: 12 },
-            }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
+            {...(isMobile ? {} : {
+              label: {
+                value: showPercentage ? "Percentage (%)" : "Count",
+                angle: -90,
+                position: "insideLeft",
+                offset: 10,
+                style: { fontSize: 12 },
+              },
+            })}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value: string) => (
-              <span className="text-sm">{value === "hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
+              <span className={isMobile ? "text-[10px]" : "text-sm"}>{value === "hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
             )}
           />
           <Bar

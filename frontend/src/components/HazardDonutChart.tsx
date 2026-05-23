@@ -3,6 +3,7 @@
 import { useMemo } from "react"
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface HazardDonutChartProps {
   asteroids: AsteroidSummary[]
@@ -32,6 +33,8 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function HazardDonutChart({ asteroids }: HazardDonutChartProps) {
+  const isMobile = useMobile()
+
   const chartData = useMemo(() => {
     const total = asteroids.length
     const hazardous = asteroids.filter((a) => a.is_potentially_hazardous_asteroid).length
@@ -65,14 +68,14 @@ export function HazardDonutChart({ asteroids }: HazardDonutChartProps) {
 
   return (
     <div className="relative">
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
             cy="50%"
-            innerRadius={80}
-            outerRadius={140}
+            innerRadius={isMobile ? 60 : 80}
+            outerRadius={isMobile ? 100 : 140}
             paddingAngle={4}
             dataKey="value"
             animationBegin={0}
@@ -86,7 +89,7 @@ export function HazardDonutChart({ asteroids }: HazardDonutChartProps) {
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value: string) => (
-              <span className="text-sm">{value}</span>
+              <span className={isMobile ? "text-[10px]" : "text-sm"}>{value}</span>
             )}
           />
         </PieChart>
@@ -94,7 +97,7 @@ export function HazardDonutChart({ asteroids }: HazardDonutChartProps) {
       {/* Center label showing total */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-2xl font-bold text-white">{asteroids.length}</p>
+          <p className={isMobile ? "text-xl font-bold text-white" : "text-2xl font-bold text-white"}>{asteroids.length}</p>
           <p className="text-xs text-muted-foreground">Total</p>
         </div>
       </div>

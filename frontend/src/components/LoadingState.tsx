@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Loader2 } from "lucide-react"
@@ -37,13 +38,17 @@ function TableRowSkeleton() {
 }
 
 function ChartSkeleton() {
+  const [heights] = useState(() =>
+    Array.from({ length: 12 }, () => Math.random() * 60 + 20)
+  )
+
   return (
     <div className="flex h-48 items-end justify-center gap-2 px-4 pb-4">
-      {Array.from({ length: 12 }).map((_, i) => (
+      {heights.map((h, i) => (
         <Skeleton
           key={i}
           className="w-6 rounded-t"
-          style={{ height: `${Math.random() * 60 + 20}%` }}
+          style={{ height: `${h}%` }}
         />
       ))}
     </div>

@@ -12,6 +12,7 @@ import {
   Legend,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface BubbleComparisonChartProps {
   asteroids: AsteroidSummary[]
@@ -50,6 +51,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export function BubbleComparisonChart({ asteroids }: BubbleComparisonChartProps) {
+  const isMobile = useMobile()
   const [logScale, setLogScale] = useState(false)
 
   const chartData = useMemo(() => {
@@ -90,29 +92,29 @@ export function BubbleComparisonChart({ asteroids }: BubbleComparisonChartProps)
           {logScale ? "Linear" : "Log"} Scale (X)
         </button>
       </div>
-      <ResponsiveContainer width="100%" height={400}>
-        <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+      <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+        <ScatterChart margin={isMobile ? { top: 10, right: 10, bottom: 10, left: 10 } : { top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
           <XAxis
             dataKey="miss_distance_km"
             name="Distance (km)"
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
             scale={logScale ? "log" : "linear"}
             domain={logScale ? ["auto", "auto"] : [0, "auto"]}
             tickFormatter={(v: number) => v >= 1_000_000 ? `${(v / 1_000_000).toFixed(1)}M` : v >= 1_000 ? `${(v / 1_000).toFixed(0)}K` : v.toLocaleString("en-US")}
-            label={{ value: "Miss Distance (km)", position: "insideBottom", offset: -10, style: { fontSize: 12 } }}
+            {...(isMobile ? {} : { label: { value: "Miss Distance (km)", position: "insideBottom", offset: -10, style: { fontSize: 12 } } })}
           />
           <YAxis
             dataKey="estimated_diameter_max_km"
             name="Diameter (km)"
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: isMobile ? 10 : 12 }}
             tickFormatter={(v: number) => v.toFixed(2)}
-            label={{ value: "Max Diameter (km)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } }}
+            {...(isMobile ? {} : { label: { value: "Max Diameter (km)", angle: -90, position: "insideLeft", offset: 10, style: { fontSize: 12 } } })}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend
             formatter={(value: string) => (
-              <span className="text-sm">{value === "Hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
+              <span className={isMobile ? "text-[10px]" : "text-sm"}>{value === "Hazardous" ? "Potentially Hazardous" : "Non-Hazardous"}</span>
             )}
           />
           <Scatter

@@ -12,6 +12,7 @@ import {
   Legend,
 } from "recharts"
 import type { AsteroidSummary } from "@/lib/types"
+import { useMobile } from "@/lib/useMobile"
 
 interface AsteroidRadarChartProps {
   asteroids: AsteroidSummary[]
@@ -48,6 +49,8 @@ const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
 }
 
 export function AsteroidRadarChart({ asteroids, selectedAsteroid }: AsteroidRadarChartProps) {
+  const isMobile = useMobile()
+
   const chartData = useMemo((): RadarMetric[] => {
     if (!selectedAsteroid || asteroids.length === 0) return []
 
@@ -141,23 +144,23 @@ export function AsteroidRadarChart({ asteroids, selectedAsteroid }: AsteroidRada
   }
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <RadarChart data={chartData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+    <ResponsiveContainer width="100%" height={isMobile ? 300 : 400}>
+      <RadarChart data={chartData} margin={isMobile ? { top: 10, right: 20, bottom: 10, left: 20 } : { top: 20, right: 30, bottom: 20, left: 30 }}>
         <PolarGrid className="stroke-border" />
         <PolarAngleAxis
           dataKey="metric"
-          tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+          tick={{ fontSize: isMobile ? 9 : 11, fill: "hsl(var(--muted-foreground))" }}
         />
         <PolarRadiusAxis
           angle={30}
           domain={[0, 100]}
-          tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
+          tick={{ fontSize: isMobile ? 8 : 10, fill: "hsl(var(--muted-foreground))" }}
           tickFormatter={(v: number) => `${v}%`}
         />
         <Tooltip content={<CustomTooltip />} />
         <Legend
           formatter={(value: string) => (
-            <span className="text-sm">{value === "asteroidValue" ? selectedAsteroid.name : "Dataset Average"}</span>
+            <span className={isMobile ? "text-[10px]" : "text-sm"}>{value === "asteroidValue" ? selectedAsteroid.name : "Dataset Average"}</span>
           )}
         />
         <Radar
