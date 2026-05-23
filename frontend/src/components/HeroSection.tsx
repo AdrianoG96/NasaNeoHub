@@ -19,10 +19,8 @@ const COSMIC_FACTS = [
 export function HeroSection() {
   const [fact, setFact] = useState(COSMIC_FACTS[0])
   const [time, setTime] = useState(new Date())
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
     setFact(COSMIC_FACTS[Math.floor(Math.random() * COSMIC_FACTS.length)])
     const timer = setInterval(() => setTime(new Date()), 1000)
     return () => clearInterval(timer)

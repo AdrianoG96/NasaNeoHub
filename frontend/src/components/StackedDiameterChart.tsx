@@ -57,8 +57,6 @@ export function StackedDiameterChart({ asteroids }: StackedDiameterChartProps) {
   const [showPercentage, setShowPercentage] = useState(false)
 
   const chartData = useMemo(() => {
-    const total = asteroids.length
-
     return BINS.map((bin) => {
       const binAsteroids = asteroids.filter((a) => {
         const diameter = a.estimated_diameter_max_km

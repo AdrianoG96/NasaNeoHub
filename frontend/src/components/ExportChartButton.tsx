@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useState } from "react"
 import { Camera } from "lucide-react"
 import { toPng } from "html-to-image"
 

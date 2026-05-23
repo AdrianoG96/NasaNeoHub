@@ -1,8 +1,8 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo } from "react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Lightbulb, ArrowRight } from "lucide-react"
+import { Lightbulb } from "lucide-react"
 import type { AsteroidSummary } from "@/lib/types"
 
 interface KeyInsightsProps {
@@ -10,7 +10,6 @@ interface KeyInsightsProps {
 }
 
 const MOON_DISTANCE_KM = 384_400
-const EARTH_CIRCUMFERENCE_KM = 40_075
 
 const COMPARISONS = [
   { max: 0.01, label: "a small car", icon: "🚗" },
@@ -46,37 +45,6 @@ interface Insight {
   title: string
   description: string
   highlight?: string
-}
-
-function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string }) {
-  const [display, setDisplay] = useState(0)
-
-  useEffect(() => {
-    if (value === 0) {
-      setDisplay(0)
-      return
-    }
-    const duration = 1000
-    const steps = 30
-    const increment = value / steps
-    let current = 0
-    const timer = setInterval(() => {
-      current += increment
-      if (current >= value) {
-        setDisplay(value)
-        clearInterval(timer)
-      } else {
-        setDisplay(Math.floor(current))
-      }
-    }, duration / steps)
-    return () => clearInterval(timer)
-  }, [value])
-
-  return (
-    <span className="font-mono">
-      {display.toLocaleString("en-US")}{suffix}
-    </span>
-  )
 }
 
 export function KeyInsights({ asteroids }: KeyInsightsProps) {
