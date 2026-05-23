@@ -16,7 +16,12 @@ interface DonutData {
   color: string
 }
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface CustomTooltipProps {
+  active?: boolean
+  payload?: Array<{ payload: DonutData }>
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null
 
   const data = payload[0].payload as DonutData

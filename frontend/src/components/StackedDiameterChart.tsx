@@ -37,7 +37,12 @@ const BINS = [
   { label: "5+ km", min: 5, max: Infinity },
 ]
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface CustomTooltipProps {
+  active?: boolean
+  payload?: Array<{ payload: StackedBinData }>
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null
 
   const data = payload[0].payload as StackedBinData

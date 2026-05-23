@@ -731,6 +731,7 @@ function Scene({ asteroids, onAsteroidClick, controls, orbitControlsRef }: Scene
       )}
 
       <DreiOrbitControls
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ref={orbitControlsRef as React.Ref<any>}
         enablePan
         enableZoom
