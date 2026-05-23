@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Sparkles, Moon } from "lucide-react"
+import { Rocket, Moon } from "lucide-react"
 
 const COSMIC_FACTS = [
   "Did you know? The closest asteroid to Earth in the last year was just 2,900 km away!",
@@ -56,7 +56,7 @@ export function HeroSection() {
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Sparkles className="size-5 text-yellow-400" />
+              <Rocket className="size-5 text-yellow-400" />
               <h1 className="bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-2xl font-bold tracking-tight text-transparent sm:text-3xl">
                 Near-Earth Objects Explorer
               </h1>

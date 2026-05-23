@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   title: "NEO Dashboard — Near-Earth Objects Explorer",
   description:
     "Explore asteroids approaching Earth using real NASA data. Filter, sort, and discover near-Earth objects.",
+  icons: {
+    icon: "/rocket-favicon.svg",
+  },
 }
 
 export default function RootLayout({
