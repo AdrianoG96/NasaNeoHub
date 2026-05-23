@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from "react"
 import { Award, Search, AlertTriangle, Orbit, Star, Telescope } from "lucide-react"
+import { useToast } from "@/components/ToastProvider"
 import type { AsteroidSummary } from "@/lib/types"
 
 interface Badge {
@@ -65,7 +65,7 @@ interface DiscoveryBadgesProps {
 export function DiscoveryBadges({ asteroids }: DiscoveryBadgesProps) {
   const [earnedBadges, setEarnedBadges] = useState<Set<string>>(new Set())
   const [totalSearches, setTotalSearches] = useState(0)
-  const [showNewBadge, setShowNewBadge] = useState<string | null>(null)
+  const { addToast } = useToast()
 
   useEffect(() => {
     const saved = localStorage.getItem("neo-badges")
@@ -94,32 +94,22 @@ export function DiscoveryBadges({ asteroids }: DiscoveryBadgesProps) {
       }
       setEarnedBadges(updated)
       localStorage.setItem("neo-badges", JSON.stringify([...updated]))
-      setShowNewBadge(newlyEarned[0])
-      setTimeout(() => setShowNewBadge(null), 4000)
+
+      const badge = BADGES.find((b) => b.id === newlyEarned[0])
+      if (badge) {
+        addToast({
+          type: "success",
+          title: `🏆 New Badge Unlocked!`,
+          message: badge.name,
+        })
+      }
     }
-  }, [asteroids, earnedBadges, totalSearches])
+  }, [asteroids, earnedBadges, totalSearches, addToast])
 
   if (earnedBadges.size === 0) return null
 
   return (
     <>
-      {/* New Badge Toast */}
-      {showNewBadge && (
-        <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-right-4 fade-in duration-300">
-          <Card className="border-yellow-500/30 bg-yellow-500/10 shadow-lg shadow-yellow-500/10 backdrop-blur-sm">
-            <CardContent className="flex items-center gap-3 p-4">
-              <Award className="size-6 text-yellow-400" />
-              <div>
-                <p className="text-sm font-semibold text-yellow-300">New Badge Unlocked!</p>
-                <p className="text-xs text-yellow-200/70">
-                  {BADGES.find((b) => b.id === showNewBadge)?.name}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
       {/* Badges Row */}
       <div className="flex flex-wrap gap-2">
         {BADGES.filter((b) => earnedBadges.has(b.id)).map((badge) => (
