@@ -139,6 +139,21 @@ GET https://tuo-backend.up.railway.app/api/neo/feed?start_date=2026-05-20&end_da
 
 Il frontend è già configurato per Next.js. Non serve alcun Dockerfile — Vercel lo builda nativamente.
 
+#### Crea il file `vercel.json`
+
+Crea il file `frontend/vercel.json` per configurare esplicitamente il framework:
+
+```json
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install"
+}
+```
+
+> **Nota**: Questo file è necessario per progetti monorepo dove la root del frontend non coincide con la root del repository. Senza di esso, Vercel potrebbe non riconoscere correttamente il framework e restituire 404.
+
 ### 3.2 — Collega Vercel al Repository
 
 1. Vai su [vercel.com/dashboard](https://vercel.com/dashboard)
